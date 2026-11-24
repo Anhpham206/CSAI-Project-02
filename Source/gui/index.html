@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Griductive Solver — No-Guess SAT Deduction</title>
+  <style>
+    :root {
+      --bg: #eef2f7;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --border: #d5dde8;
+      --header-from: #0f172a;
+      --header-to: #1e293b;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+
+      --hidden-bg: #e8eef6;
+      --hidden-border: #b8c5d6;
+      --hidden-pill: #64748b;
+
+      --criminal-bg: #fef2f2;
+      --criminal-border: #f87171;
+      --criminal-pill: #dc2626;
+      --criminal-accent: #ef4444;
+
+      --innocent-bg: #ecfdf5;
+      --innocent-border: #34d399;
+      --innocent-pill: #059669;
+      --innocent-accent: #10b981;
+
+      --selected-ring: #4f46e5;
+      --selected-bg: #eef2ff;
+
+      --region-ring: #0284c7;
+      --region-bg: #e0f2fe;
+      --region-glow: rgba(14, 165, 233, 0.35);
+
+      --hint-ring: #d97706;
+      --hint-bg: #fef3c7;
+      --hint-glow: rgba(245, 158, 11, 0.45);
+      --hint-clue-ring: #f59e0b;
+      --hint-clue-bg: #fffbeb;
+
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 6px 18px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.22);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.4;
+    }
+
+    /* Header & Toolbar */
+    .topbar {
+      background: linear-gradient(135deg, var(--header-from), var(--header-to));
+      color: #f8fafc;
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 240px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+    }
+
+    .meta-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    .meta-pill.backend {
+      background: rgba(56, 189, 248, 0.2);
+      color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    .puzzle-subtitle {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      transition: transform 0.12s ease, background-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    button:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-dark {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .btn-dark:hover:not(:disabled) {
+      background: #475569;
+    }
+
+    .btn-hint {
+      background: #d97706;
+      color: #ffffff;
+    }
+    .btn-hint:hover:not(:disabled) {
+      background: #b45309;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: #1d4ed8;
+    }
+
+    .btn-stop {
+      background: #dc2626;
+      color: #ffffff;
+    }
+    .btn-stop:hover:not(:disabled) {
+      background: #b91c1c;
+    }
+
+    .btn-criminal {
+      background: #dc2626;
+      color: #ffffff;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+    }
+    .btn-criminal:hover:not(:disabled) {
+      background: #b91c1c;
+    }
+
+    .btn-innocent {
+      background: #059669;
+      color: #ffffff;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+    }
+    .btn-innocent:hover:not(:disabled) {
+      background: #047857;
+    }
+
+    .btn-soft {
+      background: #e2e8f0;
+      color: #1e293b;
+      padding: 6px 11px;
+      font-size: 0.8rem;
+    }
+    .btn-soft:hover:not(:disabled) {
+      background: #cbd5e1;
+    }
+
+    /* Main Container */
+    .page-shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 14px 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Status Banner */
+    .banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      border-radius: var(--radius);
+      border: 1px solid #93c5fd;
+      background: #eff6ff;
+      color: #1e3a8a;
+      box-shadow: var(--shadow-sm);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .banner-badge {
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 3px 9px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+      background: #bfdbfe;
+      color: #1e3a8a;
+    }
+
+    .banner-text {
+      font-size: 0.93rem;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .banner.level-success {
+      background: #ecfdf5;
+      border-color: #6ee7b7;
+      color: #065f46;
+    }
+    .banner.level-success .banner-badge {
+      background: #a7f3d0;
+      color: #065f46;
+    }
+
+    .banner.level-warn {
+      background: #fffbeb;
+      border-color: #fcd34d;
+      color: #92400e;
+    }
+    .banner.level-warn .banner-badge {
+      background: #fde68a;
+      color: #92400e;
+    }
+
+    .banner.level-error {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      color: #991b1b;
+    }
+    .banner.level-error .banner-badge {
+      background: #fecaca;
+      color: #991b1b;
+    }
+
+    .banner.level-solved {
+      background: linear-gradient(135deg, #d1fae5, #ecfdf5);
+      border-color: #10b981;
+      color: #064e3b;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.18);
+    }
+    .banner.level-solved .banner-badge {
+      background: #059669;
+      color: #ffffff;
+    }
+
+    /* Two-column Workspace */
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(330px, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Board Panel */
+    .board-panel {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .board-grid {
+      --grid-size: 3;
+      display: grid;
+      grid-template-columns: 28px repeat(var(--grid-size), minmax(0, 1fr));
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .board-grid.grid-size-4 {
+      gap: 7px;
+    }
+
+    .board-grid.grid-size-5 {
+      gap: 6px;
+    }
+
+    .axis-corner {
+      width: 28px;
+      height: 24px;
+    }
+
+    .axis-col {
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-secondary);
+      padding-bottom: 2px;
+      letter-spacing: 0.06em;
+    }
+
+    .axis-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-secondary);
+    }
+
+    /* Individual Character Card */
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 152px;
+      padding: 10px 11px;
+      border-radius: 10px;
+      border: 2px solid var(--hidden-border);
+      background: var(--hidden-bg);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.14s ease, box-shadow 0.16s ease, border-color 0.16s ease, background-color 0.18s ease;
+    }
+
+    .board-grid.grid-size-4 .card {
+      min-height: 136px;
+      padding: 8px 9px;
+    }
+
+    .board-grid.grid-size-5 .card {
+      min-height: 118px;
+      padding: 7px 8px;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card.is-hidden {
+      background: linear-gradient(160deg, #edf2f8, #e2e9f3);
+      border-color: var(--hidden-border);
+    }
+
+    .card.is-criminal {
+      background: var(--criminal-bg);
+      border-color: var(--criminal-border);
+    }
+
+    .card.is-innocent {
+      background: var(--innocent-bg);
+      border-color: var(--innocent-border);
+    }
+
+    .card.just-flipped {
+      animation: cardReveal 0.36s ease;
+    }
+
+    @keyframes cardReveal {
+      0% { transform: scale(0.94); opacity: 0.65; }
+      60% { transform: scale(1.03); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Interactive States */
+    .card.is-region {
+      border-color: var(--region-ring);
+      box-shadow: 0 0 0 3px var(--region-glow);
+    }
+    .card.is-hidden.is-region {
+      background: var(--region-bg);
+    }
+
+    .card.is-clue-owner {
+      border-color: #0369a1;
+      box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.25);
+    }
+
+    .card.is-hint-clue {
+      border-color: var(--hint-clue-ring);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
+    }
+    .card.is-hint-clue.is-criminal,
+    .card.is-hint-clue.is-innocent {
+      background: var(--hint-clue-bg);
+    }
+
+    .card.is-selected {
+      background: var(--selected-bg);
+      border-color: var(--selected-ring);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.28);
+    }
+
+    .card.is-hint-target {
+      background: var(--hint-bg);
+      border-color: var(--hint-ring);
+      box-shadow: 0 0 0 4px var(--hint-glow);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .card-coord {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .status-pill {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 2px 7px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--hidden-pill);
+      text-transform: uppercase;
+    }
+
+    .status-pill.criminal {
+      background: var(--criminal-pill);
+    }
+
+    .status-pill.innocent {
+      background: var(--innocent-pill);
+    }
+
+    .card-name {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 2px;
+      overflow-wrap: anywhere;
+    }
+
+    .board-grid.grid-size-5 .card-name {
+      font-size: 0.86rem;
+    }
+
+    .card-prof {
+      font-size: 0.78rem;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-top: -2px;
+    }
+
+    .board-grid.grid-size-5 .card-prof {
+      font-size: 0.72rem;
+    }
+
+    .card-clue {
+      margin-top: 6px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      line-height: 1.35;
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      overflow-wrap: break-word;
+    }
+
+    .board-grid.grid-size-4 .card-clue {
+      font-size: 0.75rem;
+      padding: 5px 7px;
+    }
+
+    .board-grid.grid-size-5 .card-clue {
+      font-size: 0.7rem;
+      padding: 4px 6px;
+    }
+
+    .card.is-hidden .card-clue {
+      background: rgba(100, 116, 139, 0.1);
+      color: var(--text-muted);
+      font-style: italic;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px dashed rgba(100, 116, 139, 0.35);
+    }
+
+    .card.is-criminal .card-clue {
+      background: rgba(255, 255, 255, 0.82);
+      border-left: 3px solid var(--criminal-accent);
+      color: var(--text-primary);
+    }
+
+    .card.is-innocent .card-clue {
+      background: rgba(255, 255, 255, 0.82);
+      border-left: 3px solid var(--innocent-accent);
+      color: var(--text-primary);
+    }
+
+    /* Board Legend Bar */
+    .legend-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      border: 2px solid transparent;
+    }
+
+    /* Right Side Panel */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .side-card {
+      padding: 14px 16px;
+    }
+
+    .side-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .side-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+    }
+
+    .state-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+
+    .state-badge.PLAYING { background: #dbeafe; color: #1d4ed8; }
+    .state-badge.SOLVED { background: #d1fae5; color: #065f46; }
+    .state-badge.UNKNOWN { background: #fef3c7; color: #92400e; }
+    .state-badge.INCONSISTENT { background: #fee2e2; color: #991b1b; }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      height: 10px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #2563eb, #10b981);
+      transition: width 0.25s ease;
+    }
+
+    .selected-desc {
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      background: var(--surface-soft);
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      min-height: 46px;
+    }
+
+    .verdict-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .shortcut-hint {
+      margin-top: 8px;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    kbd {
+      display: inline-block;
+      padding: 1px 5px;
+      font-size: 0.72rem;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      color: var(--text-primary);
+    }
+
+    /* Deduction Trace Log */
+    .trace-card {
+      display: flex;
+      flex-direction: column;
+      max-height: 460px;
+    }
+
+    .trace-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+      min-height: 140px;
+      max-height: 390px;
+    }
+
+    .trace-empty {
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      text-align: center;
+      padding: 24px 10px;
+      background: var(--surface-soft);
+      border-radius: var(--radius-sm);
+      border: 1px dashed #cbd5e1;
+    }
+
+    .trace-item {
+      border: 1px solid #e2e8f0;
+      background: var(--surface-soft);
+      border-radius: var(--radius-sm);
+      padding: 9px 10px;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .trace-item.verdict-CRIMINAL { border-left: 3px solid var(--criminal-pill); }
+    .trace-item.verdict-INNOCENT { border-left: 3px solid var(--innocent-pill); }
+    .trace-item.verdict-UNKNOWN { border-left: 3px solid #d97706; }
+    .trace-item.verdict-INCONSISTENT { border-left: 3px solid #991b1b; }
+
+    .trace-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .trace-step-label {
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .trace-source {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .trace-meta {
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+    }
+
+    .trace-sat {
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.72rem;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      padding: 4px 6px;
+      color: #334155;
+      overflow-wrap: anywhere;
+    }
+
+    .trace-clue {
+      font-size: 0.77rem;
+      color: var(--text-primary);
+      background: #ffffff;
+      border-radius: 5px;
+      padding: 4px 7px;
+      border-left: 2px solid #64748b;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .modal-head {
+      padding: 14px 18px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .modal-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .puzzle-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .puzzle-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-sm);
+      background: #ffffff;
+      text-align: left;
+      width: 100%;
+    }
+
+    .puzzle-option:hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+
+    .puzzle-option-title {
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: 0.92rem;
+    }
+
+    .puzzle-option-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .upload-box {
+      border: 2px dashed #94a3b8;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .upload-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .upload-input {
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <div class="brand-row">
+        <span class="brand-title">GRIDUCTIVE SOLVER</span>
+        <div class="meta-pills">
+          <span class="meta-pill" id="metaSize">-</span>
+          <span class="meta-pill" id="metaId">-</span>
+          <span class="meta-pill backend" id="metaBackend">Loading...</span>
+        </div>
+      </div>
+      <div class="puzzle-subtitle" id="puzzleTitle">Loading puzzle...</div>
+    </div>
+
+    <div class="toolbar-actions">
+      <button type="button" class="btn btn-dark" id="btnLoad">Load</button>
+      <button type="button" class="btn btn-dark" id="btnRestart">Restart</button>
+      <button type="button" class="btn btn-hint" id="btnHint">Hint</button>
+      <button type="button" class="btn btn-primary" id="btnAutoSolve">Auto Solve</button>
+      <button type="button" class="btn btn-stop" id="btnStop" disabled>Stop</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="banner" id="statusBanner" role="status" aria-live="polite">
+      <span class="banner-badge" id="bannerCode">READY</span>
+      <span class="banner-text" id="bannerMsg">Click a face-down card to deduce its status, or click a revealed card to highlight its clue region.</span>
+    </section>
+
+    <div class="workspace">
+      <section class="panel board-panel">
+        <div class="board-grid grid-size-3" id="boardGrid"></div>
+
+        <div class="legend-bar">
+          <div class="legend-items">
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--selected-bg); border-color: var(--selected-ring);"></span>
+              Selected
+            </span>
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--region-bg); border-color: var(--region-ring);"></span>
+              Clue Region
+            </span>
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--hint-bg); border-color: var(--hint-ring);"></span>
+              Hint Target
+            </span>
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--hint-clue-bg); border-color: var(--hint-clue-ring);"></span>
+              Active Clue
+            </span>
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--criminal-bg); border-color: var(--criminal-border);"></span>
+              Criminal
+            </span>
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--innocent-bg); border-color: var(--innocent-border);"></span>
+              Innocent
+            </span>
+          </div>
+          <button type="button" class="btn-soft" id="btnClearHighlight">Clear Highlight</button>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel side-card">
+          <div class="side-header">
+            <span class="side-title">Case Progress</span>
+            <span class="state-badge PLAYING" id="gameStateBadge">PLAYING</span>
+          </div>
+          <div class="progress-meta">
+            <span id="progressText">Revealed: 0 / 0</span>
+            <span id="progressPct">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </section>
+
+        <section class="panel side-card">
+          <div class="side-header">
+            <span class="side-title">No-Guess Verdict</span>
+          </div>
+          <div class="selected-desc" id="selectedInfo">
+            Click a face-down card to select it, or click a revealed card to highlight its clue region.
+          </div>
+          <div class="verdict-buttons">
+            <button type="button" class="btn-criminal" id="btnCallCriminal" disabled>Call CRIMINAL (C)</button>
+            <button type="button" class="btn-innocent" id="btnCallInnocent" disabled>Call INNOCENT (I)</button>
+          </div>
+          <div class="shortcut-hint">
+            <span>Shortcuts: <kbd>C</kbd> Criminal &nbsp; <kbd>I</kbd> Innocent &nbsp; <kbd>Esc</kbd> Clear</span>
+          </div>
+        </section>
+
+        <section class="panel side-card trace-card">
+          <div class="side-header">
+            <span class="side-title">Deduction Trace / Move Log</span>
+            <span class="puzzle-option-meta" id="traceCount">0 steps</span>
+          </div>
+          <div class="trace-list" id="traceList">
+            <div class="trace-empty">No deduction steps yet. Make a provable move or press Auto Solve.</div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Load Puzzle Modal -->
+  <div class="modal-backdrop" id="loadModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loadModalTitle">
+      <div class="modal-head">
+        <span class="modal-title" id="loadModalTitle">Load Puzzle</span>
+        <button type="button" class="btn-soft" id="btnCloseModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <div class="upload-label" style="margin-bottom: 8px;">Available Puzzles</div>
+          <div class="puzzle-list" id="puzzleList">
+            <div class="trace-empty">Loading puzzles...</div>
+          </div>
+        </div>
+
+        <div class="upload-box">
+          <label class="upload-label" for="fileUploadInput">Or Upload Any Local Puzzle (.json)</label>
+          <input class="upload-input" type="file" id="fileUploadInput" accept=".json,application/json" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const AUTO_SOLVE_INTERVAL_MS = 400;
+
+      const ui = {
+        publicState: null,
+        traceHistory: [],
+        backend: "",
+        gameStatus: "PLAYING",
+        selectedCoord: null,
+        highlightOwner: null,
+        highlightCells: [],
+        hintCoord: null,
+        hintVerdict: null,
+        hintClueCells: [],
+        lastFlippedCoord: null,
+        isAutoSolving: false,
+        autoSolveTimer: null,
+      };
+
+      const el = {
+        puzzleTitle: document.getElementById("puzzleTitle"),
+        metaSize: document.getElementById("metaSize"),
+        metaId: document.getElementById("metaId"),
+        metaBackend: document.getElementById("metaBackend"),
+        btnLoad: document.getElementById("btnLoad"),
+        btnRestart: document.getElementById("btnRestart"),
+        btnHint: document.getElementById("btnHint"),
+        btnAutoSolve: document.getElementById("btnAutoSolve"),
+        btnStop: document.getElementById("btnStop"),
+        btnClearHighlight: document.getElementById("btnClearHighlight"),
+        btnCallCriminal: document.getElementById("btnCallCriminal"),
+        btnCallInnocent: document.getElementById("btnCallInnocent"),
+        statusBanner: document.getElementById("statusBanner"),
+        bannerCode: document.getElementById("bannerCode"),
+        bannerMsg: document.getElementById("bannerMsg"),
+        boardGrid: document.getElementById("boardGrid"),
+        gameStateBadge: document.getElementById("gameStateBadge"),
+        progressText: document.getElementById("progressText"),
+        progressPct: document.getElementById("progressPct"),
+        progressFill: document.getElementById("progressFill"),
+        selectedInfo: document.getElementById("selectedInfo"),
+        traceCount: document.getElementById("traceCount"),
+        traceList: document.getElementById("traceList"),
+        loadModal: document.getElementById("loadModal"),
+        btnCloseModal: document.getElementById("btnCloseModal"),
+        puzzleList: document.getElementById("puzzleList"),
+        fileUploadInput: document.getElementById("fileUploadInput"),
+      };
+
+      function setBanner(code, message, level) {
+        el.bannerCode.textContent = code;
+        el.bannerMsg.textContent = message;
+        el.statusBanner.className = "banner" + (level ? " level-" + level : "");
+      }
+
+      async function apiRequest(url, options) {
+        const res = await fetch(url, options);
+        let data = {};
+        try {
+          data = await res.json();
+        } catch (_err) {
+          data = {};
+        }
+        if (!res.ok) {
+          throw new Error(data.error || "Request failed (" + res.status + ")");
+        }
+        return data;
+      }
+
+      function formatRegionDesc(region) {
+        if (!region || typeof region !== "object") return "the specified region";
+        const kind = String(region.kind || "").trim().toUpperCase();
+        if (kind === "ROW") return "row " + region.value;
+        if (kind === "COLUMN" || kind === "COL") return "column " + String(region.value || "").toUpperCase();
+        if (kind === "NEIGHBORS") return "neighbors of " + String(region.center || region.target || region.cell || "").toUpperCase();
+        if (kind === "EXPLICIT") return (region.cells || []).map(c => String(c).toUpperCase()).join(", ") || "selected cells";
+        if (kind === "BOUNDARY") return "the board boundary";
+        if (kind === "CORNERS") return "the board corners";
+        return kind.toLowerCase();
+      }
+
+      function formatClueText(clue) {
+        if (!clue || typeof clue !== "object") return "";
+        if (typeof clue.text === "string" && clue.text.trim()) {
+          return clue.text.trim();
+        }
+        const type = String(clue.type || "").trim().toUpperCase();
+        if (type === "FACT") {
+          return String(clue.target || "?").toUpperCase() + " is " + String(clue.status || "unknown").toLowerCase() + ".";
+        }
+        if (type === "SAME" && Array.isArray(clue.targets) && clue.targets.length >= 2) {
+          return clue.targets[0].toUpperCase() + " and " + clue.targets[1].toUpperCase() + " have the same status.";
+        }
+        if (type === "DIFFERENT" && Array.isArray(clue.targets) && clue.targets.length >= 2) {
+          return clue.targets[0].toUpperCase() + " and " + clue.targets[1].toUpperCase() + " have different statuses.";
+        }
+        if (type === "EXACTLY" || type === "AT_LEAST" || type === "AT_MOST") {
+          const k = clue.k ?? 0;
+          const noun = k === 1 ? "criminal" : "criminals";
+          const prefix = type === "EXACTLY" ? "Exactly" : (type === "AT_LEAST" ? "At least" : "At most");
+          return prefix + " " + k + " " + noun + " in " + formatRegionDesc(clue.region) + ".";
+        }
+        return "Clue (" + (type || "UNKNOWN") + ").";
+      }
+
+      function clearTransientHighlights() {
+        ui.highlightOwner = null;
+        ui.highlightCells = [];
+        ui.hintCoord = null;
+        ui.hintVerdict = null;
+        ui.hintClueCells = [];
+      }
+
+      function updateControls() {
+        const hasBoard = Boolean(ui.publicState);
+        const isSolved = hasBoard && Boolean(ui.publicState.is_solved);
+        const canManual = hasBoard && !ui.isAutoSolving && !isSolved && Boolean(ui.selectedCoord);
+
+        el.btnLoad.disabled = ui.isAutoSolving;
+        el.btnRestart.disabled = !hasBoard || ui.isAutoSolving;
+        el.btnHint.disabled = !hasBoard || ui.isAutoSolving || isSolved;
+        el.btnAutoSolve.disabled = !hasBoard || ui.isAutoSolving || isSolved;
+        el.btnStop.disabled = !ui.isAutoSolving;
+        el.btnCallCriminal.disabled = !canManual;
+        el.btnCallInnocent.disabled = !canManual;
+      }
+
+      function renderHeaderAndSidebar() {
+        const state = ui.publicState;
+        if (!state) return;
+
+        el.puzzleTitle.textContent = state.title || state.puzzle_id;
+        el.metaSize.textContent = state.size + " x " + state.size;
+        el.metaId.textContent = state.puzzle_id;
+        el.metaBackend.textContent = ui.backend || "Logic Engine";
+
+        const revealed = Number(state.revealed_count || 0);
+        const total = Number(state.total_cells || 0);
+        const pct = total > 0 ? Math.round((revealed / total) * 100) : 0;
+        el.progressText.textContent = "Revealed: " + revealed + " / " + total;
+        el.progressPct.textContent = pct + "%";
+        el.progressFill.style.width = pct + "%";
+
+        const badgeStatus = state.is_solved ? "SOLVED" : (ui.gameStatus || "PLAYING");
+        el.gameStateBadge.textContent = badgeStatus;
+        el.gameStateBadge.className = "state-badge " + badgeStatus;
+
+        if (ui.selectedCoord && state.cells[ui.selectedCoord] && !state.cells[ui.selectedCoord].is_revealed) {
+          const cell = state.cells[ui.selectedCoord];
+          const prof = cell.profession ? " — " + cell.profession : "";
+          el.selectedInfo.innerHTML =
+            "<strong>" + escapeHtml(cell.coord) + ": " + escapeHtml(cell.name) + "</strong>" +
+            escapeHtml(prof) + "<br /><span style='color:var(--text-secondary)'>Submit a logically provable verdict:</span>";
+        } else {
+          ui.selectedCoord = null;
+          if (state.is_solved) {
+            el.selectedInfo.textContent = "All cards have been logically deduced and revealed!";
+          } else {
+            el.selectedInfo.textContent = "Click a face-down card to select it, or click a revealed card to highlight its clue region.";
+          }
+        }
+
+        updateControls();
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function renderBoard() {
+        const state = ui.publicState;
+        if (!state) {
+          el.boardGrid.innerHTML = "";
+          return;
+        }
+
+        const size = Number(state.size);
+        el.boardGrid.style.setProperty("--grid-size", String(size));
+        el.boardGrid.className = "board-grid grid-size-" + Math.min(5, Math.max(3, size));
+
+        const regionSet = new Set(ui.highlightCells);
+        const hintClueSet = new Set(ui.hintClueCells);
+        const frag = document.createDocumentFragment();
+
+        const corner = document.createElement("div");
+        corner.className = "axis-corner";
+        frag.appendChild(corner);
+
+        for (let c = 0; c < size; c++) {
+          const colHead = document.createElement("div");
+          colHead.className = "axis-col";
+          colHead.textContent = String.fromCharCode(65 + c);
+          frag.appendChild(colHead);
+        }
+
+        for (let r = 0; r < size; r++) {
+          const rowHead = document.createElement("div");
+          rowHead.className = "axis-row";
+          rowHead.textContent = String(r + 1);
+          frag.appendChild(rowHead);
+
+          for (let c = 0; c < size; c++) {
+            const coord = String.fromCharCode(65 + c) + String(r + 1);
+            const cell = state.cells[coord];
+            const isRevealed = Boolean(cell && cell.is_revealed);
+
+            const card = document.createElement("div");
+            const classes = ["card"];
+            if (!isRevealed) {
+              classes.push("is-hidden");
+            } else if (cell.status === "CRIMINAL") {
+              classes.push("is-criminal");
+            } else {
+              classes.push("is-innocent");
+            }
+
+            if (regionSet.has(coord)) classes.push("is-region");
+            if (ui.highlightOwner === coord) classes.push("is-clue-owner");
+            if (hintClueSet.has(coord)) classes.push("is-hint-clue");
+            if (!isRevealed && ui.selectedCoord === coord) classes.push("is-selected");
+            if (!isRevealed && ui.hintCoord === coord) classes.push("is-hint-target");
+            if (ui.lastFlippedCoord === coord) classes.push("just-flipped");
+
+            card.className = classes.join(" ");
+            card.dataset.coord = coord;
+
+            const pillClass = !isRevealed
+              ? "status-pill"
+              : (cell.status === "CRIMINAL" ? "status-pill criminal" : "status-pill innocent");
+            const pillText = !isRevealed ? "?" : cell.status;
+            const clueText = isRevealed
+              ? formatClueText(cell.clue)
+              : "Hidden Clue";
+
+            card.innerHTML =
+              '<div class="card-head">' +
+                '<span class="card-coord">' + escapeHtml(coord) + '</span>' +
+                '<span class="' + pillClass + '">' + escapeHtml(pillText) + '</span>' +
+              '</div>' +
+              '<div class="card-name">' + escapeHtml(cell ? cell.name : "") + '</div>' +
+              '<div class="card-prof">' + escapeHtml(cell ? cell.profession : "") + '</div>' +
+              '<div class="card-clue">' + escapeHtml(clueText) + '</div>';
+
+            card.addEventListener("click", function () {
+              handleCardClick(coord);
+            });
+
+            frag.appendChild(card);
+          }
+        }
+
+        el.boardGrid.innerHTML = "";
+        el.boardGrid.appendChild(frag);
+        ui.lastFlippedCoord = null;
+      }
+
+      function summarizeSatQueries(entry) {
+        const queries = Array.isArray(entry.sat_queries) ? entry.sat_queries : [];
+        if (queries.length === 0) return "SAT: 0 queries";
+
+        const coord = entry.selected_coord;
+        const targetQueries = coord
+          ? queries.filter(q => q.target_coord === coord)
+          : queries.slice(-2);
+
+        const parts = (targetQueries.length ? targetQueries : queries.slice(-2)).map(q => {
+          const target = q.target_coord || "?";
+          if (target === "KB") {
+            return "KB: " + q.result;
+          }
+          const lit = q.assumed_verdict === "INNOCENT" ? "¬C_" + target : "C_" + target;
+          return "KB ∧ " + lit + " → " + q.result;
+        });
+
+        return "SAT (" + queries.length + "): " + parts.join(" | ");
+      }
+
+      function renderTraceHistory() {
+        const list = ui.traceHistory || [];
+        el.traceCount.textContent = list.length === 1 ? "1 step" : list.length + " steps";
+
+        if (list.length === 0) {
+          el.traceList.innerHTML = '<div class="trace-empty">No deduction steps yet. Make a provable move or press Auto Solve.</div>';
+          return;
+        }
+
+        const frag = document.createDocumentFragment();
+        list.forEach(entry => {
+          const item = document.createElement("div");
+          const verdict = String(entry.verdict || "UNKNOWN").toUpperCase();
+          item.className = "trace-item verdict-" + verdict;
+
+          const coord = entry.selected_coord || "-";
+          const activeClues = Array.isArray(entry.active_clue_ids) && entry.active_clue_ids.length
+            ? entry.active_clue_ids.join(", ")
+            : "none";
+          const sourceLabel = entry.source || "AUTO";
+          const pillClass = verdict === "CRIMINAL"
+            ? "status-pill criminal"
+            : (verdict === "INNOCENT" ? "status-pill innocent" : "status-pill");
+          const clueText = entry.revealed_clue_text || (entry.revealed_clue ? formatClueText(entry.revealed_clue) : "");
+
+          let html =
+            '<div class="trace-top">' +
+              '<span class="trace-step-label">Step #' + escapeHtml(entry.step) + ' · ' + escapeHtml(coord) + '</span>' +
+              '<span style="display:inline-flex;align-items:center;gap:6px;">' +
+                '<span class="trace-source">' + escapeHtml(sourceLabel) + '</span>' +
+                '<span class="' + pillClass + '">' + escapeHtml(verdict) + '</span>' +
+              '</span>' +
+            '</div>' +
+            '<div class="trace-meta">Active clues: <strong>' + escapeHtml(activeClues) + '</strong></div>' +
+            '<div class="trace-sat">' + escapeHtml(summarizeSatQueries(entry)) + '</div>';
+
+          if (clueText) {
+            html += '<div class="trace-clue">New clue: ' + escapeHtml(clueText) + '</div>';
+          }
+
+          item.innerHTML = html;
+          frag.appendChild(item);
+        });
+
+        el.traceList.innerHTML = "";
+        el.traceList.appendChild(frag);
+        el.traceList.scrollTop = el.traceList.scrollHeight;
+      }
+
+      function renderAll() {
+        renderHeaderAndSidebar();
+        renderBoard();
+        renderTraceHistory();
+      }
+
+      async function handleCardClick(coord) {
+        if (ui.isAutoSolving || !ui.publicState) return;
+        const cell = ui.publicState.cells[coord];
+        if (!cell) return;
+
+        if (cell.is_revealed) {
+          if (ui.highlightOwner === coord) {
+            clearTransientHighlights();
+            setBanner("INFO", "Cleared clue region highlight for " + coord + ".", "");
+            renderAll();
+            return;
+          }
+          try {
+            const data = await apiRequest("/api/highlight?coord=" + encodeURIComponent(coord));
+            ui.hintCoord = null;
+            ui.hintVerdict = null;
+            ui.hintClueCells = [];
+            ui.highlightOwner = data.coord;
+            ui.highlightCells = Array.isArray(data.cells) ? data.cells : [];
+            if (ui.highlightCells.length > 0) {
+              setBanner("CLUE_REGION", "Highlighting clue from " + data.coord + ": referenced cells = " + ui.highlightCells.join(", ") + ".", "");
+            } else {
+              setBanner("CLUE_REGION", "Clue at " + data.coord + " has no referenced cells to highlight.", "");
+            }
+            renderAll();
+          } catch (err) {
+            setBanner("ERROR", err.message, "error");
+          }
+        } else {
+          ui.selectedCoord = coord;
+          renderAll();
+        }
+      }
+
+      async function submitVerdict(verdict) {
+        if (ui.isAutoSolving || !ui.selectedCoord) return;
+        const coord = ui.selectedCoord;
+        try {
+          const data = await apiRequest("/api/verdict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ coord: coord, verdict: verdict }),
+          });
+
+          const result = data.result || {};
+          ui.publicState = data.public_state;
+          ui.traceHistory = data.trace_history || ui.traceHistory;
+          ui.gameStatus = data.game_status || ui.gameStatus;
+
+          const code = result.code || "INVALID";
+          if (code === "ACCEPTED") {
+            ui.lastFlippedCoord = result.coord;
+            ui.selectedCoord = null;
+            ui.hintCoord = null;
+            ui.hintVerdict = null;
+            ui.hintClueCells = [];
+            if (result.is_solved) {
+              setBanner("SOLVED", "Case Solved! " + result.message + " All cards are now revealed.", "solved");
+            } else {
+              const clueTxt = result.revealed_clue ? " New clue: " + formatClueText(result.revealed_clue) : "";
+              setBanner("ACCEPTED", result.message + clueTxt, "success");
+            }
+          } else if (code === "NOT_PROVABLE") {
+            setBanner("NOT_PROVABLE", "Cannot be proven yet from current clues — no guessing allowed. (" + result.message + ")", "warn");
+          } else if (code === "CONTRADICTED") {
+            setBanner("CONTRADICTED", "Contradicts currently revealed clues. (" + result.message + ")", "error");
+          } else if (code === "INCONSISTENT") {
+            setBanner("INCONSISTENT", "Revealed clues are mutually inconsistent (UNSAT). (" + result.message + ")", "error");
+          } else {
+            setBanner(code, result.message || "Invalid verdict.", "error");
+          }
+          renderAll();
+        } catch (err) {
+          setBanner("ERROR", err.message, "error");
+        }
+      }
+
+      async function requestHint() {
+        if (ui.isAutoSolving || !ui.publicState) return;
+        try {
+          const data = await apiRequest("/api/hint", { method: "POST" });
+          ui.publicState = data.public_state;
+          ui.gameStatus = data.game_status || ui.gameStatus;
+          ui.highlightOwner = null;
+          ui.highlightCells = [];
+
+          const hint = data.hint;
+          if (ui.publicState.is_solved) {
+            clearTransientHighlights();
+            setBanner("SOLVED", "Puzzle is already completely solved!", "solved");
+          } else if (!hint) {
+            clearTransientHighlights();
+            setBanner("UNKNOWN", "Hint: No forced move exists from currently revealed clues (UNKNOWN — no guessing allowed).", "warn");
+          } else if (hint.verdict === "INCONSISTENT" || !hint.target_coord) {
+            ui.hintCoord = null;
+            ui.hintVerdict = "INCONSISTENT";
+            ui.hintClueCells = hint.active_clue_ids || [];
+            setBanner("INCONSISTENT", "Hint: Revealed clues (" + (ui.hintClueCells.join(", ") || "none") + ") are mutually inconsistent (UNSAT).", "error");
+          } else {
+            ui.hintCoord = hint.target_coord;
+            ui.hintVerdict = hint.verdict;
+            ui.hintClueCells = hint.active_clue_ids || [];
+            ui.selectedCoord = hint.target_coord;
+            setBanner(
+              "HINT",
+              "Forced move found: " + hint.target_coord + " must be " + hint.verdict +
+              " (Active clues: " + (ui.hintClueCells.join(", ") || "none") + ").",
+              "warn"
+            );
+          }
+          renderAll();
+        } catch (err) {
+          setBanner("ERROR", err.message, "error");
+        }
+      }
+
+      function stopAutoSolve(silent) {
+        if (ui.autoSolveTimer !== null) {
+          clearTimeout(ui.autoSolveTimer);
+          ui.autoSolveTimer = null;
+        }
+        const wasRunning = ui.isAutoSolving;
+        ui.isAutoSolving = false;
+        if (wasRunning && !silent) {
+          setBanner("STOPPED", "Auto Solve paused by user.", "");
+        }
+        updateControls();
+      }
+
+      async function runAutoSolveStep() {
+        if (!ui.isAutoSolving) return;
+        try {
+          const data = await apiRequest("/api/step", { method: "POST" });
+          ui.publicState = data.public_state;
+          ui.traceHistory = data.trace_history || ui.traceHistory;
+          ui.gameStatus = data.game_status || ui.gameStatus;
+
+          const trace = data.trace;
+          if (!trace) {
+            stopAutoSolve(true);
+            if (ui.publicState.is_solved) {
+              setBanner("SOLVED", "Case Solved! All cards have been deduced without guessing.", "solved");
+            }
+            renderAll();
+            return;
+          }
+
+          clearTransientHighlights();
+          ui.selectedCoord = null;
+
+          if (trace.verdict === "INCONSISTENT") {
+            stopAutoSolve(true);
+            setBanner("INCONSISTENT", "Auto Solve halted: revealed clues are mutually inconsistent (UNSAT).", "error");
+            renderAll();
+            return;
+          }
+
+          if (trace.verdict === "UNKNOWN" || !trace.selected_coord) {
+            stopAutoSolve(true);
+            setBanner("UNKNOWN", "Auto Solve halted: no logically forced move exists (UNKNOWN — no guessing allowed).", "warn");
+            renderAll();
+            return;
+          }
+
+          ui.lastFlippedCoord = trace.selected_coord;
+          ui.hintClueCells = trace.active_clue_ids || [];
+
+          if (ui.publicState.is_solved) {
+            stopAutoSolve(true);
+            setBanner(
+              "SOLVED",
+              "Case Solved! Step #" + trace.step + " deduced " + trace.selected_coord + " = " + trace.verdict + ".",
+              "solved"
+            );
+            renderAll();
+            return;
+          }
+
+          const newClueTxt = trace.revealed_clue ? " New clue: " + formatClueText(trace.revealed_clue) : "";
+          setBanner(
+            "AUTO_STEP",
+            "Step #" + trace.step + ": Deduced " + trace.selected_coord + " = " + trace.verdict + "." + newClueTxt,
+            "success"
+          );
+          renderAll();
+
+          if (ui.isAutoSolving) {
+            ui.autoSolveTimer = setTimeout(runAutoSolveStep, AUTO_SOLVE_INTERVAL_MS);
+          }
+        } catch (err) {
+          stopAutoSolve(true);
+          setBanner("ERROR", "Auto Solve error: " + err.message, "error");
+          renderAll();
+        }
+      }
+
+      function startAutoSolve() {
+        if (ui.isAutoSolving || !ui.publicState || ui.publicState.is_solved) return;
+        ui.isAutoSolving = true;
+        clearTransientHighlights();
+        ui.selectedCoord = null;
+        setBanner("AUTO_SOLVE", "Running progressive No-Guess SAT deduction...", "");
+        updateControls();
+        runAutoSolveStep();
+      }
+
+      async function restartGame() {
+        stopAutoSolve(true);
+        try {
+          const data = await apiRequest("/api/restart", { method: "POST" });
+          ui.publicState = data.public_state;
+          ui.traceHistory = data.trace_history || [];
+          ui.gameStatus = data.game_status || "PLAYING";
+          ui.selectedCoord = null;
+          clearTransientHighlights();
+          setBanner(
+            "RESTARTED",
+            "Restarted '" + ui.publicState.title + "'. Initial revealed: " +
+              ((ui.publicState.revealed_cells || []).join(", ") || "none") + ".",
+            ""
+          );
+          renderAll();
+        } catch (err) {
+          setBanner("ERROR", err.message, "error");
+        }
+      }
+
+      async function openLoadModal() {
+        if (ui.isAutoSolving) return;
+        el.fileUploadInput.value = "";
+        el.loadModal.classList.add("open");
+        el.loadModal.setAttribute("aria-hidden", "false");
+        el.puzzleList.innerHTML = '<div class="trace-empty">Loading puzzles...</div>';
+
+        try {
+          const data = await apiRequest("/api/puzzles");
+          const puzzles = data.puzzles || [];
+          if (puzzles.length === 0) {
+            el.puzzleList.innerHTML = '<div class="trace-empty">No JSON puzzles found in data/puzzles/. Upload a JSON file below.</div>';
+            return;
+          }
+          const frag = document.createDocumentFragment();
+          puzzles.forEach(item => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "puzzle-option";
+            btn.innerHTML =
+              '<div>' +
+                '<div class="puzzle-option-title">' + escapeHtml(item.title || item.filename) + '</div>' +
+                '<div class="puzzle-option-meta">' + escapeHtml(item.filename) + ' · id: ' + escapeHtml(item.puzzle_id || "-") + '</div>' +
+              '</div>' +
+              '<span class="meta-pill" style="background:#e2e8f0;color:#0f172a;">' + escapeHtml(item.size) + 'x' + escapeHtml(item.size) + '</span>';
+            btn.addEventListener("click", function () {
+              loadPuzzlePayload({ filename: item.filename });
+            });
+            frag.appendChild(btn);
+          });
+          el.puzzleList.innerHTML = "";
+          el.puzzleList.appendChild(frag);
+        } catch (err) {
+          el.puzzleList.innerHTML = '<div class="trace-empty">Failed to list puzzles: ' + escapeHtml(err.message) + '</div>';
+        }
+      }
+
+      function closeLoadModal() {
+        el.loadModal.classList.remove("open");
+        el.loadModal.setAttribute("aria-hidden", "true");
+      }
+
+      async function loadPuzzlePayload(payload) {
+        stopAutoSolve(true);
+        try {
+          const data = await apiRequest("/api/load", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          ui.publicState = data.public_state;
+          ui.traceHistory = data.trace_history || [];
+          ui.gameStatus = data.game_status || "PLAYING";
+          ui.backend = data.backend || ui.backend;
+          ui.selectedCoord = null;
+          clearTransientHighlights();
+          closeLoadModal();
+          setBanner(
+            "LOADED",
+            "Loaded '" + ui.publicState.title + "' (" + ui.publicState.size + "x" + ui.publicState.size +
+              "). Initial revealed: " + ((ui.publicState.revealed_cells || []).join(", ") || "none") + ".",
+            ""
+          );
+          renderAll();
+        } catch (err) {
+          closeLoadModal();
+          setBanner("LOAD_ERROR", "Failed to load puzzle: " + err.message, "error");
+        }
+      }
+
+      async function handleFileUpload(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        try {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          await loadPuzzlePayload({ puzzle_data: parsed });
+        } catch (err) {
+          closeLoadModal();
+          setBanner("LOAD_ERROR", "Invalid JSON file '" + file.name + "': " + err.message, "error");
+        }
+      }
+
+      async function initApp() {
+        try {
+          const data = await apiRequest("/api/state");
+          ui.publicState = data.public_state;
+          ui.traceHistory = data.trace_history || [];
+          ui.backend = data.backend || "Logic Engine";
+          ui.gameStatus = data.game_status || "PLAYING";
+          if (ui.publicState) {
+            setBanner(
+              "READY",
+              "Loaded '" + ui.publicState.title + "' (" + ui.publicState.size + "x" + ui.publicState.size +
+                "). Click a face-down card to deduce, or a revealed card to highlight its clue region.",
+              ""
+            );
+          }
+          renderAll();
+        } catch (err) {
+          setBanner("ERROR", "Unable to fetch initial state: " + err.message, "error");
+        }
+      }
+
+      // Wire controls
+      el.btnLoad.addEventListener("click", openLoadModal);
+      el.btnCloseModal.addEventListener("click", closeLoadModal);
+      el.loadModal.addEventListener("click", function (event) {
+        if (event.target === el.loadModal) closeLoadModal();
+      });
+      el.fileUploadInput.addEventListener("change", handleFileUpload);
+      el.btnRestart.addEventListener("click", restartGame);
+      el.btnHint.addEventListener("click", requestHint);
+      el.btnAutoSolve.addEventListener("click", startAutoSolve);
+      el.btnStop.addEventListener("click", function () { stopAutoSolve(false); });
+      el.btnClearHighlight.addEventListener("click", function () {
+        clearTransientHighlights();
+        setBanner("INFO", "Cleared active highlights.", "");
+        renderAll();
+      });
+      el.btnCallCriminal.addEventListener("click", function () { submitVerdict("CRIMINAL"); });
+      el.btnCallInnocent.addEventListener("click", function () { submitVerdict("INNOCENT"); });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.target && (event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA")) {
+          return;
+        }
+        if (event.key === "Escape") {
+          if (el.loadModal.classList.contains("open")) {
+            closeLoadModal();
+          } else {
+            clearTransientHighlights();
+            ui.selectedCoord = null;
+            renderAll();
+          }
+          return;
+        }
+        if (el.loadModal.classList.contains("open") || ui.isAutoSolving || !ui.selectedCoord) {
+          return;
+        }
+        if (event.key === "c" || event.key === "C") {
+          submitVerdict("CRIMINAL");
+        } else if (event.key === "i" || event.key === "I") {
+          submitVerdict("INNOCENT");
+        }
+      });
+
+      initApp();
+    })();
+  </script>
+</body>
+</html>
