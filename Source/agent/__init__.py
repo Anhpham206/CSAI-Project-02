@@ -1,2 +1,45 @@
-# Module tác tử suy luận tự động (Deductive Logic Agent)
-# Nhận tri thức công khai, truy vấn hệ quả logic qua SAT solver và thực hiện vòng lặp suy luận không đoán mò.
+"""Module tác tử suy luận tự động (Deductive Logic Agent)."""
+
+from agent.deductive_agent import (
+    MOVE_CONTRADICTED,
+    MOVE_NOT_PROVABLE,
+    MOVE_PROVABLE,
+    UNIQUENESS_MULTIPLE,
+    UNIQUENESS_NONE,
+    UNIQUENESS_UNIQUE,
+    VERDICT_CRIMINAL,
+    VERDICT_INCONSISTENT,
+    VERDICT_INNOCENT,
+    VERDICT_SOLVED,
+    VERDICT_UNKNOWN,
+    DeductiveAgent,
+    EncoderProtocol,
+    GameEngineProtocol,
+    SolverProtocol,
+    check_entailment,
+    coord_to_var,
+    is_kb_consistent,
+    var_to_coord,
+)
+
+__all__ = [
+    "VERDICT_CRIMINAL",
+    "VERDICT_INNOCENT",
+    "VERDICT_UNKNOWN",
+    "VERDICT_INCONSISTENT",
+    "VERDICT_SOLVED",
+    "MOVE_PROVABLE",
+    "MOVE_NOT_PROVABLE",
+    "MOVE_CONTRADICTED",
+    "UNIQUENESS_UNIQUE",
+    "UNIQUENESS_MULTIPLE",
+    "UNIQUENESS_NONE",
+    "SolverProtocol",
+    "EncoderProtocol",
+    "GameEngineProtocol",
+    "DeductiveAgent",
+    "check_entailment",
+    "is_kb_consistent",
+    "coord_to_var",
+    "var_to_coord",
+]
