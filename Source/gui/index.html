@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Griductive Solver — No-Guess SAT Deduction</title>
+  <style>
+    :root {
+      --bg: #f3ede2;
+      --board-canvas: #faf6ed;
+      --surface: #fffdf9;
+      --surface-soft: #f8f4ec;
+      --border: #dfd6c7;
+      --header-from: #1e293b;
+      --header-to: #312e81;
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --text-muted: #78716c;
+
+      --hidden-bg: #fffdf8;
+      --hidden-border: #d5ccbc;
+      --hidden-pill: #78716c;
+
+      --criminal-bg: #fae3e0;
+      --criminal-border: #dc5b5b;
+      --criminal-pill: #dc2626;
+      --criminal-accent: #e11d48;
+
+      --innocent-bg: #e2f2df;
+      --innocent-border: #3d9970;
+      --innocent-pill: #059669;
+      --innocent-accent: #10b981;
+
+      --selected-ring: #6366f1;
+      --selected-bg: #eef2ff;
+
+      --region-ring: #2563eb;
+      --region-bg: #eff8ff;
+      --region-glow: rgba(37, 99, 235, 0.28);
+
+      --hint-ring: #d97706;
+      --hint-bg: #fef3c7;
+      --hint-glow: rgba(245, 158, 11, 0.45);
+      --hint-clue-ring: #f59e0b;
+      --hint-clue-bg: #fffbeb;
+
+      --shadow-sm: 0 2px 6px rgba(68, 56, 40, 0.07);
+      --shadow-md: 0 8px 22px rgba(68, 56, 40, 0.12);
+      --shadow-lg: 0 18px 42px rgba(30, 41, 59, 0.22);
+      --radius: 14px;
+      --radius-sm: 9px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(251, 207, 232, 0.22), transparent 36%),
+        radial-gradient(circle at 88% 18%, rgba(186, 230, 253, 0.25), transparent 38%),
+        radial-gradient(circle at 50% 92%, rgba(253, 230, 138, 0.2), transparent 42%),
+        var(--bg);
+      color: var(--text-primary);
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.4;
+    }
+
+    /* Header & Toolbar */
+    .topbar {
+      background: linear-gradient(135deg, var(--header-from), var(--header-to));
+      color: #f8fafc;
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 240px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+    }
+
+    .meta-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    .meta-pill.backend {
+      background: rgba(56, 189, 248, 0.2);
+      color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    .puzzle-subtitle {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      transition: transform 0.12s ease, background-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    button:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-dark {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .btn-dark:hover:not(:disabled) {
+      background: #475569;
+    }
+
+    .btn-hint {
+      background: #d97706;
+      color: #ffffff;
+    }
+    .btn-hint:hover:not(:disabled) {
+      background: #b45309;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: #1d4ed8;
+    }
+
+    .btn-stop {
+      background: #dc2626;
+      color: #ffffff;
+    }
+    .btn-stop:hover:not(:disabled) {
+      background: #b91c1c;
+    }
+
+    .btn-criminal {
+      background: #dc2626;
+      color: #ffffff;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+    }
+    .btn-criminal:hover:not(:disabled) {
+      background: #b91c1c;
+    }
+
+    .btn-innocent {
+      background: #059669;
+      color: #ffffff;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+    }
+    .btn-innocent:hover:not(:disabled) {
+      background: #047857;
+    }
+
+    .btn-soft {
+      background: #e2e8f0;
+      color: #1e293b;
+      padding: 6px 11px;
+      font-size: 0.8rem;
+    }
+    .btn-soft:hover:not(:disabled) {
+      background: #cbd5e1;
+    }
+
+    /* Main Container */
+    .page-shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 14px 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Status Banner */
+    .banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      border-radius: var(--radius);
+      border: 1px solid #93c5fd;
+      background: #eff6ff;
+      color: #1e3a8a;
+      box-shadow: var(--shadow-sm);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .banner-badge {
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 3px 9px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+      background: #bfdbfe;
+      color: #1e3a8a;
+    }
+
+    .banner-text {
+      font-size: 0.93rem;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .banner.level-success {
+      background: #ecfdf5;
+      border-color: #6ee7b7;
+      color: #065f46;
+    }
+    .banner.level-success .banner-badge {
+      background: #a7f3d0;
+      color: #065f46;
+    }
+
+    .banner.level-warn {
+      background: #fffbeb;
+      border-color: #fcd34d;
+      color: #92400e;
+    }
+    .banner.level-warn .banner-badge {
+      background: #fde68a;
+      color: #92400e;
+    }
+
+    .banner.level-error {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      color: #991b1b;
+    }
+    .banner.level-error .banner-badge {
+      background: #fecaca;
+      color: #991b1b;
+    }
+
+    .banner.level-solved {
+      background: linear-gradient(135deg, #d1fae5, #ecfdf5);
+      border-color: #10b981;
+      color: #064e3b;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.18);
+    }
+    .banner.level-solved .banner-badge {
+      background: #059669;
+      color: #ffffff;
+    }
+
+    /* Two-column Workspace */
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(330px, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Board Panel */
+    .board-panel {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background:
+        radial-gradient(rgba(180, 165, 140, 0.22) 1px, transparent 1px),
+        var(--board-canvas);
+      background-size: 18px 18px;
+    }
+
+    .board-grid {
+      --grid-size: 3;
+      display: grid;
+      grid-template-columns: 28px repeat(var(--grid-size), minmax(0, 1fr));
+      gap: 11px;
+      align-items: stretch;
+    }
+
+    .board-grid.grid-size-4 {
+      gap: 9px;
+    }
+
+    .board-grid.grid-size-5 {
+      gap: 7px;
+    }
+
+    .axis-corner {
+      width: 28px;
+      height: 24px;
+    }
+
+    .axis-col {
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #7c6f5b;
+      padding-bottom: 2px;
+      letter-spacing: 0.08em;
+    }
+
+    .axis-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #7c6f5b;
+    }
+
+    /* Individual Character Card */
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-height: 186px;
+      padding: 10px 11px 11px;
+      border-radius: 14px;
+      border: 2.5px solid var(--hidden-border);
+      background: var(--hidden-bg);
+      box-shadow: 0 2px 6px rgba(84, 68, 46, 0.06);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.16s ease, box-shadow 0.18s ease, border-color 0.18s ease, background-color 0.2s ease, opacity 0.22s ease, filter 0.22s ease;
+    }
+
+    .board-grid.grid-size-4 .card {
+      min-height: 164px;
+      padding: 8px 9px 9px;
+      border-radius: 13px;
+    }
+
+    .board-grid.grid-size-5 .card {
+      min-height: 144px;
+      padding: 6px 7px 8px;
+      border-radius: 11px;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card.is-hidden {
+      background: linear-gradient(180deg, #ffffff 0%, #fcf8f0 100%);
+      border-color: var(--hidden-border);
+    }
+
+    .card.is-criminal {
+      background: linear-gradient(180deg, #fdf0ee 0%, var(--criminal-bg) 100%);
+      border-color: var(--criminal-border);
+    }
+
+    .card.is-innocent {
+      background: linear-gradient(180deg, #eff8ed 0%, var(--innocent-bg) 100%);
+      border-color: var(--innocent-border);
+    }
+
+    .card.just-flipped {
+      animation: cardReveal 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes cardReveal {
+      0% { transform: scale(0.9) rotateY(-18deg); opacity: 0.55; }
+      55% { transform: scale(1.04) rotateY(4deg); }
+      100% { transform: scale(1) rotateY(0); opacity: 1; }
+    }
+
+    /* Focus-dimming when a clue region highlight is active */
+    .board-grid.has-region-focus .card:not(.is-region):not(.is-clue-owner) {
+      opacity: 0.42;
+      filter: saturate(0.55);
+    }
+
+    .board-grid.has-region-focus .card:not(.is-region):not(.is-clue-owner):hover {
+      opacity: 0.92;
+      filter: none;
+    }
+
+    /* Interactive States */
+    .card.is-region {
+      border-color: var(--region-ring);
+      border-width: 3px;
+      box-shadow: 0 0 0 3px var(--region-glow), 0 6px 16px rgba(37, 99, 235, 0.14);
+      opacity: 1;
+      filter: none;
+    }
+    .card.is-hidden.is-region {
+      background: linear-gradient(180deg, #ffffff 0%, var(--region-bg) 100%);
+    }
+
+    .card.is-clue-owner {
+      border-color: #2f855a;
+      border-width: 3px;
+      box-shadow: 0 10px 26px rgba(30, 41, 59, 0.2), 0 0 0 3px rgba(59, 130, 246, 0.22);
+      transform: translateY(-2px);
+      z-index: 4;
+      opacity: 1;
+      filter: none;
+    }
+
+    .card.is-criminal.is-clue-owner {
+      border-color: #dc2626;
+    }
+
+    .clue-zoom-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #334155;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.2);
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .card.is-hint-clue {
+      border-color: var(--hint-clue-ring);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.34);
+    }
+    .card.is-hint-clue.is-criminal,
+    .card.is-hint-clue.is-innocent {
+      background: var(--hint-clue-bg);
+    }
+
+    .card.is-selected {
+      background: linear-gradient(180deg, #ffffff 0%, var(--selected-bg) 100%);
+      border-color: var(--selected-ring);
+      border-width: 3px;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.28), 0 6px 16px rgba(99, 102, 241, 0.14);
+    }
+
+    .card.is-hint-target {
+      background: linear-gradient(180deg, #fffdf5 0%, var(--hint-bg) 100%);
+      border-color: var(--hint-ring);
+      border-width: 3px;
+      box-shadow: 0 0 0 4px var(--hint-glow), 0 8px 18px rgba(217, 119, 6, 0.22);
+      animation: hintPulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.42), 0 6px 16px rgba(217, 119, 6, 0.18); }
+      50% { box-shadow: 0 0 0 7px rgba(245, 158, 11, 0.22), 0 8px 22px rgba(217, 119, 6, 0.28); }
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .card-coord {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #8b7e6b;
+      letter-spacing: 0.03em;
+    }
+
+    .card.is-criminal .card-coord { color: #991b1b; }
+    .card.is-innocent .card-coord { color: #166534; }
+
+    .status-pill {
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 2px 7px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--hidden-pill);
+      text-transform: uppercase;
+    }
+
+    .status-pill.criminal {
+      background: var(--criminal-pill);
+    }
+
+    .status-pill.innocent {
+      background: var(--innocent-pill);
+    }
+
+    /* Face-down centered chibi portrait layout */
+    .card-hidden-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 3px;
+      padding: 2px 0 4px;
+    }
+
+    .avatar-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .avatar-large {
+      width: 82px;
+      height: 82px;
+      filter: drop-shadow(0 3px 5px rgba(72, 58, 42, 0.12));
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover .avatar-large {
+      transform: scale(1.06) translateY(-1px);
+    }
+
+    .board-grid.grid-size-4 .avatar-large {
+      width: 68px;
+      height: 68px;
+    }
+
+    .board-grid.grid-size-5 .avatar-large {
+      width: 54px;
+      height: 54px;
+    }
+
+    /* Revealed card compact header with cute chibi portrait */
+    .card-revealed-identity {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1px;
+    }
+
+    .avatar-compact {
+      width: 44px;
+      height: 44px;
+      filter: drop-shadow(0 2px 3px rgba(72, 58, 42, 0.12));
+      flex-shrink: 0;
+    }
+
+    .board-grid.grid-size-4 .avatar-compact {
+      width: 38px;
+      height: 38px;
+    }
+
+    .board-grid.grid-size-5 .avatar-compact {
+      width: 32px;
+      height: 32px;
+    }
+
+    .card-identity-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      text-align: left;
+    }
+
+    .card-name {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.18;
+      overflow-wrap: anywhere;
+    }
+
+    .board-grid.grid-size-4 .card-name {
+      font-size: 0.9rem;
+    }
+
+    .board-grid.grid-size-5 .card-name {
+      font-size: 0.82rem;
+    }
+
+    .card-prof {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .board-grid.grid-size-5 .card-prof {
+      font-size: 0.69rem;
+    }
+
+    .card-hidden-tag {
+      margin-top: 4px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #a89f91;
+      letter-spacing: 0.03em;
+    }
+
+    .card-clue {
+      margin-top: 5px;
+      padding: 7px 8px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      line-height: 1.36;
+      font-weight: 500;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow-wrap: break-word;
+    }
+
+    .board-grid.grid-size-4 .card-clue {
+      font-size: 0.74rem;
+      padding: 5px 7px;
+    }
+
+    .board-grid.grid-size-5 .card-clue {
+      font-size: 0.68rem;
+      padding: 4px 5px;
+    }
+
+    .card.is-criminal .card-clue {
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(220, 91, 91, 0.28);
+      color: #2b1d1d;
+    }
+
+    .card.is-innocent .card-clue {
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(61, 153, 112, 0.28);
+      color: #172b20;
+    }
+
+    .clue-kw-region {
+      color: #0369a1;
+      font-weight: 700;
+    }
+
+    .clue-kw-role {
+      color: #9f1239;
+      font-weight: 700;
+    }
+
+    .clue-kw-coord {
+      color: #6d28d9;
+      font-weight: 700;
+    }
+
+    /* Selected character preview with cute anime portrait */
+    .selected-preview {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar-sidebar {
+      width: 54px;
+      height: 54px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(72, 58, 42, 0.14));
+    }
+
+    /* Board Legend Bar */
+    .legend-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      border: 2px solid transparent;
+    }
+
+    /* Right Side Panel */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .side-card {
+      padding: 14px 16px;
+    }
+
+    .side-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .side-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+    }
+
+    .state-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+
+    .state-badge.PLAYING { background: #dbeafe; color: #1d4ed8; }
+    .state-badge.SOLVED { background: #d1fae5; color: #065f46; }
+    .state-badge.UNKNOWN { background: #fef3c7; color: #92400e; }
+    .state-badge.INCONSISTENT { background: #fee2e2; color: #991b1b; }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      height: 10px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #2563eb, #10b981);
+      transition: width 0.25s ease;
+    }
+
+    .selected-desc {
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      background: var(--surface-soft);
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      min-height: 46px;
+    }
+
+    .verdict-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .shortcut-hint {
+      margin-top: 8px;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    kbd {
+      display: inline-block;
+      padding: 1px 5px;
+      font-size: 0.72rem;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      color: var(--text-primary);
+    }
+
+    /* Deduction Trace Log */
+    .trace-card {
+      display: flex;
+      flex-direction: column;
+      max-height: 460px;
+    }
+
+    .trace-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+      min-height: 140px;
+      max-height: 390px;
+    }
+
+    .trace-empty {
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      text-align: center;
+      padding: 24px 10px;
+      background: var(--surface-soft);
+      border-radius: var(--radius-sm);
+      border: 1px dashed #cbd5e1;
+    }
+
+    .trace-item {
+      border: 1px solid #e2e8f0;
+      background: var(--surface-soft);
+      border-radius: var(--radius-sm);
+      padding: 9px 10px;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .trace-item.verdict-CRIMINAL { border-left: 3px solid var(--criminal-pill); }
+    .trace-item.verdict-INNOCENT { border-left: 3px solid var(--innocent-pill); }
+    .trace-item.verdict-UNKNOWN { border-left: 3px solid #d97706; }
+    .trace-item.verdict-INCONSISTENT { border-left: 3px solid #991b1b; }
+
+    .trace-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .trace-step-label {
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .trace-source {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .trace-meta {
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+    }
+
+    .trace-sat {
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.72rem;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      padding: 4px 6px;
+      color: #334155;
+      overflow-wrap: anywhere;
+    }
+
+    .trace-clue {
+      font-size: 0.77rem;
+      color: var(--text-primary);
+      background: #ffffff;
+      border-radius: 5px;
+      padding: 4px 7px;
+      border-left: 2px solid #64748b;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .modal-head {
+      padding: 14px 18px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .modal-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .puzzle-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .puzzle-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-sm);
+      background: #ffffff;
+      text-align: left;
+      width: 100%;
+    }
+
+    .puzzle-option:hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+
+    .puzzle-option-title {
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: 0.92rem;
+    }
+
+    .puzzle-option-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .upload-box {
+      border: 2px dashed #94a3b8;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .upload-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .upload-input {
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <div class="brand-row">
+        <span class="brand-title">GRIDUCTIVE SOLVER</span>
+        <div class="meta-pills">
+          <span class="meta-pill" id="metaSize">-</span>
+          <span class="meta-pill" id="metaId">-</span>
+          <span class="meta-pill backend" id="metaBackend">Loading...</span>
+        </div>
+      </div>
+      <div class="puzzle-subtitle" id="puzzleTitle">Loading puzzle...</div>
+    </div>
+
+    <div class="toolbar-actions">
+      <button type="button" class="btn btn-dark" id="btnLoad">Load</button>
+      <button type="button" class="btn btn-dark" id="btnRestart">Restart</button>
+      <button type="button" class="btn btn-hint" id="btnHint">Hint</button>
+      <button type="button" class="btn btn-primary" id="btnAutoSolve">Auto Solve</button>
+      <button type="button" class="btn btn-stop" id="btnStop" disabled>Stop</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="banner" id="statusBanner" role="status" aria-live="polite">
+      <span class="banner-badge" id="bannerCode">READY</span>
+      <span class="banner-text" id="bannerMsg">Click a face-down card to deduce its status, or click a revealed card to highlight its clue region.</span>
+    </section>
+
+    <div class="workspace">
+      <section class="panel board-panel">
+        <div class="board-grid grid-size-3" id="boardGrid"></div>
+
+        <div class="legend-bar">
+          <div class="legend-items">
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--selected-bg); border-color: var(--selected-ring);"></span>
+              Selected
+            </span>
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--region-bg); border-color: var(--region-ring);"></span>
+              Clue Region
+            </span>
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--hint-bg); border-color: var(--hint-ring);"></span>
+              Hint Target
+            </span>
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--hint-clue-bg); border-color: var(--hint-clue-ring);"></span>
+              Active Clue
+            </span>
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--criminal-bg); border-color: var(--criminal-border);"></span>
+              Criminal
+            </span>
+            <span class="legend-item">
+              <span class="swatch" style="background: var(--innocent-bg); border-color: var(--innocent-border);"></span>
+              Innocent
+            </span>
+          </div>
+          <button type="button" class="btn-soft" id="btnClearHighlight">Clear Highlight</button>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel side-card">
+          <div class="side-header">
+            <span class="side-title">Case Progress</span>
+            <span class="state-badge PLAYING" id="gameStateBadge">PLAYING</span>
+          </div>
+          <div class="progress-meta">
+            <span id="progressText">Revealed: 0 / 0</span>
+            <span id="progressPct">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </section>
+
+        <section class="panel side-card">
+          <div class="side-header">
+            <span class="side-title">No-Guess Verdict</span>
+          </div>
+          <div class="selected-desc" id="selectedInfo">
+            Click a face-down card to select it, or click a revealed card to highlight its clue region.
+          </div>
+          <div class="verdict-buttons">
+            <button type="button" class="btn-criminal" id="btnCallCriminal" disabled>Call CRIMINAL (C)</button>
+            <button type="button" class="btn-innocent" id="btnCallInnocent" disabled>Call INNOCENT (I)</button>
+          </div>
+          <div class="shortcut-hint">
+            <span>Shortcuts: <kbd>C</kbd> Criminal &nbsp; <kbd>I</kbd> Innocent &nbsp; <kbd>Esc</kbd> Clear</span>
+          </div>
+        </section>
+
+        <section class="panel side-card trace-card">
+          <div class="side-header">
+            <span class="side-title">Deduction Trace / Move Log</span>
+            <span class="puzzle-option-meta" id="traceCount">0 steps</span>
+          </div>
+          <div class="trace-list" id="traceList">
+            <div class="trace-empty">No deduction steps yet. Make a provable move or press Auto Solve.</div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Load Puzzle Modal -->
+  <div class="modal-backdrop" id="loadModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loadModalTitle">
+      <div class="modal-head">
+        <span class="modal-title" id="loadModalTitle">Load Puzzle</span>
+        <button type="button" class="btn-soft" id="btnCloseModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <div class="upload-label" style="margin-bottom: 8px;">Available Puzzles</div>
+          <div class="puzzle-list" id="puzzleList">
+            <div class="trace-empty">Loading puzzles...</div>
+          </div>
+        </div>
+
+        <div class="upload-box">
+          <label class="upload-label" for="fileUploadInput">Or Upload Any Local Puzzle (.json)</label>
+          <input class="upload-input" type="file" id="fileUploadInput" accept=".json,application/json" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const AUTO_SOLVE_INTERVAL_MS = 400;
+
+      const ui = {
+        publicState: null,
+        traceHistory: [],
+        backend: "",
+        gameStatus: "PLAYING",
+        selectedCoord: null,
+        highlightOwner: null,
+        highlightCells: [],
+        hintCoord: null,
+        hintVerdict: null,
+        hintClueCells: [],
+        lastFlippedCoord: null,
+        isAutoSolving: false,
+        autoSolveTimer: null,
+      };
+
+      const el = {
+        puzzleTitle: document.getElementById("puzzleTitle"),
+        metaSize: document.getElementById("metaSize"),
+        metaId: document.getElementById("metaId"),
+        metaBackend: document.getElementById("metaBackend"),
+        btnLoad: document.getElementById("btnLoad"),
+        btnRestart: document.getElementById("btnRestart"),
+        btnHint: document.getElementById("btnHint"),
+        btnAutoSolve: document.getElementById("btnAutoSolve"),
+        btnStop: document.getElementById("btnStop"),
+        btnClearHighlight: document.getElementById("btnClearHighlight"),
+        btnCallCriminal: document.getElementById("btnCallCriminal"),
+        btnCallInnocent: document.getElementById("btnCallInnocent"),
+        statusBanner: document.getElementById("statusBanner"),
+        bannerCode: document.getElementById("bannerCode"),
+        bannerMsg: document.getElementById("bannerMsg"),
+        boardGrid: document.getElementById("boardGrid"),
+        gameStateBadge: document.getElementById("gameStateBadge"),
+        progressText: document.getElementById("progressText"),
+        progressPct: document.getElementById("progressPct"),
+        progressFill: document.getElementById("progressFill"),
+        selectedInfo: document.getElementById("selectedInfo"),
+        traceCount: document.getElementById("traceCount"),
+        traceList: document.getElementById("traceList"),
+        loadModal: document.getElementById("loadModal"),
+        btnCloseModal: document.getElementById("btnCloseModal"),
+        puzzleList: document.getElementById("puzzleList"),
+        fileUploadInput: document.getElementById("fileUploadInput"),
+      };
+
+      function setBanner(code, message, level) {
+        el.bannerCode.textContent = code;
+        el.bannerMsg.textContent = message;
+        el.statusBanner.className = "banner" + (level ? " level-" + level : "");
+      }
+
+      async function apiRequest(url, options) {
+        const res = await fetch(url, options);
+        let data = {};
+        try {
+          data = await res.json();
+        } catch (_err) {
+          data = {};
+        }
+        if (!res.ok) {
+          throw new Error(data.error || "Request failed (" + res.status + ")");
+        }
+        return data;
+      }
+
+      function formatRegionDesc(region) {
+        if (!region || typeof region !== "object") return "the specified region";
+        const kind = String(region.kind || "").trim().toUpperCase();
+        if (kind === "ROW") return "row " + region.value;
+        if (kind === "COLUMN" || kind === "COL") return "column " + String(region.value || "").toUpperCase();
+        if (kind === "NEIGHBORS") return "neighbors of " + String(region.center || region.target || region.cell || "").toUpperCase();
+        if (kind === "EXPLICIT") return (region.cells || []).map(c => String(c).toUpperCase()).join(", ") || "selected cells";
+        if (kind === "BOUNDARY") return "the board boundary";
+        if (kind === "CORNERS") return "the board corners";
+        return kind.toLowerCase();
+      }
+
+      function formatClueText(clue) {
+        if (!clue || typeof clue !== "object") return "";
+        if (typeof clue.text === "string" && clue.text.trim()) {
+          return clue.text.trim();
+        }
+        const type = String(clue.type || "").trim().toUpperCase();
+        if (type === "FACT") {
+          return String(clue.target || "?").toUpperCase() + " is " + String(clue.status || "unknown").toLowerCase() + ".";
+        }
+        if (type === "SAME" && Array.isArray(clue.targets) && clue.targets.length >= 2) {
+          return clue.targets[0].toUpperCase() + " and " + clue.targets[1].toUpperCase() + " have the same status.";
+        }
+        if (type === "DIFFERENT" && Array.isArray(clue.targets) && clue.targets.length >= 2) {
+          return clue.targets[0].toUpperCase() + " and " + clue.targets[1].toUpperCase() + " have different statuses.";
+        }
+        if (type === "EXACTLY" || type === "AT_LEAST" || type === "AT_MOST") {
+          const k = clue.k ?? 0;
+          const noun = k === 1 ? "criminal" : "criminals";
+          const prefix = type === "EXACTLY" ? "Exactly" : (type === "AT_LEAST" ? "At least" : "At most");
+          return prefix + " " + k + " " + noun + " in " + formatRegionDesc(clue.region) + ".";
+        }
+        return "Clue (" + (type || "UNKNOWN") + ").";
+      }
+
+      function clearTransientHighlights() {
+        ui.highlightOwner = null;
+        ui.highlightCells = [];
+        ui.hintCoord = null;
+        ui.hintVerdict = null;
+        ui.hintClueCells = [];
+      }
+
+      function updateControls() {
+        const hasBoard = Boolean(ui.publicState);
+        const isSolved = hasBoard && Boolean(ui.publicState.is_solved);
+        const canManual = hasBoard && !ui.isAutoSolving && !isSolved && Boolean(ui.selectedCoord);
+
+        el.btnLoad.disabled = ui.isAutoSolving;
+        el.btnRestart.disabled = !hasBoard || ui.isAutoSolving;
+        el.btnHint.disabled = !hasBoard || ui.isAutoSolving || isSolved;
+        el.btnAutoSolve.disabled = !hasBoard || ui.isAutoSolving || isSolved;
+        el.btnStop.disabled = !ui.isAutoSolving;
+        el.btnCallCriminal.disabled = !canManual;
+        el.btnCallInnocent.disabled = !canManual;
+      }
+
+      function renderHeaderAndSidebar() {
+        const state = ui.publicState;
+        if (!state) return;
+
+        el.puzzleTitle.textContent = state.title || state.puzzle_id;
+        el.metaSize.textContent = state.size + " x " + state.size;
+        el.metaId.textContent = state.puzzle_id;
+        el.metaBackend.textContent = ui.backend || "Logic Engine";
+
+        const revealed = Number(state.revealed_count || 0);
+        const total = Number(state.total_cells || 0);
+        const pct = total > 0 ? Math.round((revealed / total) * 100) : 0;
+        el.progressText.textContent = "Revealed: " + revealed + " / " + total;
+        el.progressPct.textContent = pct + "%";
+        el.progressFill.style.width = pct + "%";
+
+        const badgeStatus = state.is_solved ? "SOLVED" : (ui.gameStatus || "PLAYING");
+        el.gameStateBadge.textContent = badgeStatus;
+        el.gameStateBadge.className = "state-badge " + badgeStatus;
+
+        if (ui.selectedCoord && state.cells[ui.selectedCoord] && !state.cells[ui.selectedCoord].is_revealed) {
+          const cell = state.cells[ui.selectedCoord];
+          const prof = cell.profession ? " · " + cell.profession : "";
+          const avatarSvg = renderAnimeAvatar(cell.name, cell.profession, null, false, "avatar-sidebar");
+          el.selectedInfo.innerHTML =
+            '<div class="selected-preview">' +
+              avatarSvg +
+              '<div>' +
+                '<strong>' + escapeHtml(cell.coord) + ': ' + escapeHtml(cell.name) + '</strong>' +
+                '<div style="font-size:0.78rem;color:var(--text-muted)">' + escapeHtml(cell.profession || "Suspect") + '</div>' +
+                '<div style="font-size:0.8rem;color:var(--text-secondary);margin-top:2px;">Choose a logically provable verdict:</div>' +
+              '</div>' +
+            '</div>';
+        } else {
+          ui.selectedCoord = null;
+          if (state.is_solved) {
+            el.selectedInfo.textContent = "All cards have been logically deduced and revealed!";
+          } else {
+            el.selectedInfo.textContent = "Click a face-down card to select it, or click a revealed card to highlight its clue region.";
+          }
+        }
+
+        updateControls();
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      /* ------------------------------------------------------------------
+       * Cute Procedural Anime / Chibi Character Portrait Generator (SVG)
+       * Strictly deterministic from character name + profession ONLY when
+       * face-down (zero hidden-status leakage!). Subtle revealed flair is
+       * added only after `isRevealed === true`.
+       * ------------------------------------------------------------------ */
+      function hashName(str) {
+        let h = 2166136261;
+        const s = String(str || "anon").toLowerCase().trim();
+        for (let i = 0; i < s.length; i++) {
+          h ^= s.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        return h >>> 0;
+      }
+
+      function renderAnimeAvatar(name, profession, status, isRevealed, sizeClass) {
+        const h = hashName(name);
+        const h2 = hashName(name + "_v2");
+        const h3 = hashName(name + "_v3");
+        const prof = String(profession || "").toLowerCase();
+
+        const skins = [
+          { base: "#ffe5d4", shade: "#f5c7ae" },
+          { base: "#ffdfc8", shade: "#efbc9c" },
+          { base: "#f8cfb3", shade: "#e4ae8b" },
+          { base: "#e4b28f", shade: "#cb936d" },
+          { base: "#c88d67", shade: "#ac704c" },
+          { base: "#9e6748", shade: "#824e33" },
+        ];
+        const hairs = [
+          { main: "#2c2438", dark: "#1b1424", shine: "#6d5f85" }, // Midnight navy
+          { main: "#5e3828", dark: "#402317", shine: "#9b6b54" }, // Cocoa brown
+          { main: "#e6b85c", dark: "#c39035", shine: "#fff0b3" }, // Honey blonde
+          { main: "#ec7fa3", dark: "#c8567c", shine: "#ffd0e0" }, // Sakura pink
+          { main: "#5b8fd9", dark: "#3b6bb3", shine: "#b4d4ff" }, // Sky anime blue
+          { main: "#9b72cf", dark: "#754da8", shine: "#dbc5fb" }, // Lavender
+          { main: "#c45b3b", dark: "#963d22", shine: "#f59d7e" }, // Auburn copper
+          { main: "#3c9d8f", dark: "#267469", shine: "#9be5d9" }, // Mint teal
+          { main: "#a9714b", dark: "#7d4f30", shine: "#dfa983" }, // Caramel chestnut
+          { main: "#464f62", dark: "#2d3444", shine: "#8f9bb3" }, // Silver slate
+        ];
+        const eyeColors = [
+          { main: "#2563eb", light: "#93c5fd" },
+          { main: "#059669", light: "#6ee7b7" },
+          { main: "#9333ea", light: "#d8b4fe" },
+          { main: "#d97706", light: "#fde68a" },
+          { main: "#e11d48", light: "#fda4af" },
+          { main: "#0891b2", light: "#67e8f9" },
+          { main: "#6d4c41", light: "#d7ccc8" },
+        ];
+        const outfits = [
+          { body: "#f472b6", trim: "#ffffff", accent: "#fbcfe8" },
+          { body: "#60a5fa", trim: "#ffffff", accent: "#bfdbfe" },
+          { body: "#34d399", trim: "#ffffff", accent: "#a7f3d0" },
+          { body: "#fbbf24", trim: "#ffffff", accent: "#fef3c7" },
+          { body: "#a78bfa", trim: "#ffffff", accent: "#ddd6fe" },
+          { body: "#fb7185", trim: "#ffffff", accent: "#fecdd3" },
+          { body: "#38bdf8", trim: "#ffffff", accent: "#bae6fd" },
+        ];
+        const halos = [
+          "#fef3c7", "#fce7f3", "#e0f2fe", "#ede9fe", "#dcfce7", "#ffedd5"
+        ];
+
+        const skin = skins[h % skins.length];
+        const hair = hairs[(h >>> 4) % hairs.length];
+        const eye = eyeColors[(h2) % eyeColors.length];
+        const outfit = outfits[(h2 >>> 4) % outfits.length];
+        const haloBg = isRevealed
+          ? (status === "CRIMINAL" ? "#ffe4e6" : "#dcfce7")
+          : halos[(h3) % halos.length];
+
+        // Choose hairstyle (0..9)
+        const hairStyle = (h >>> 8) % 10;
+        // Neutral cute eye style (0..3); revealed status only adds subtle flair
+        const baseEyeStyle = (h3 >>> 4) % 4;
+        const mouthStyle = (h2 >>> 8) % 3;
+        const hasRibbon = (h3 % 3) === 0;
+        const hasAhoge = (h3 % 2) === 0;
+
+        // Profession-specific outfit & hat/accessory tweaks
+        let bodyColor = outfit.body;
+        let collarMarkup =
+          '<path d="M47 88 L60 98 L73 88 L68 103 L60 96 L52 103 Z" fill="' + outfit.trim + '"/>' +
+          '<circle cx="60" cy="100" r="3" fill="' + hair.main + '" opacity="0.85"/>';
+        let hatMarkup = "";
+        let glassesMarkup = "";
+
+        if (prof.includes("cook") || prof.includes("chef") || prof.includes("baker")) {
+          bodyColor = "#ffffff";
+          collarMarkup =
+            '<path d="M46 89 Q60 99 74 89 L70 98 L60 94 L50 98 Z" fill="#ef4444"/>' +
+            '<circle cx="54" cy="103" r="2" fill="#94a3b8"/>' +
+            '<circle cx="66" cy="103" r="2" fill="#94a3b8"/>';
+          hatMarkup =
+            '<g>' +
+              '<path d="M38 28 C34 15 47 10 53 16 C57 8 69 9 72 16 C80 12 88 19 82 28 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8"/>' +
+              '<rect x="41" y="25" width="38" height="7" rx="3" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.6"/>' +
+            '</g>';
+        } else if (prof.includes("detective") || prof.includes("sleuth")) {
+          bodyColor = "#b48352";
+          collarMarkup =
+            '<path d="M46 89 L60 100 L74 89 L70 95 L60 106 L50 95 Z" fill="#fef3c7"/>' +
+            '<path d="M58 95 L62 95 L63 108 L60 112 L57 108 Z" fill="#dc2626"/>';
+          hatMarkup =
+            '<g>' +
+              '<ellipse cx="60" cy="28" rx="28" ry="6" fill="#92633a" stroke="#6b4423" stroke-width="1.5"/>' +
+              '<path d="M41 28 C42 15 78 15 79 28 Z" fill="#b48352" stroke="#6b4423" stroke-width="1.5"/>' +
+              '<rect x="42" y="24" width="36" height="4" rx="2" fill="#5c3a1e"/>' +
+            '</g>';
+        } else if (prof.includes("guard") || prof.includes("police") || prof.includes("officer")) {
+          bodyColor = "#334155";
+          collarMarkup =
+            '<path d="M47 89 L60 99 L73 89 L69 97 L60 93 L51 97 Z" fill="#93c5fd"/>' +
+            '<polygon points="73,97 75,101 79,101 76,104 77,108 73,105 69,108 70,104 67,101 71,101" fill="#fbbf24"/>';
+          hatMarkup =
+            '<g>' +
+              '<path d="M39 29 C41 16 79 16 81 29 Z" fill="#1e3a5f" stroke="#0f172a" stroke-width="1.5"/>' +
+              '<path d="M36 29 Q60 34 84 29 Q60 25 36 29 Z" fill="#0f172a"/>' +
+              '<circle cx="60" cy="22" r="3.2" fill="#fbbf24"/>' +
+            '</g>';
+        } else if (prof.includes("astronaut") || prof.includes("pilot")) {
+          bodyColor = "#e2e8f0";
+          collarMarkup =
+            '<ellipse cx="60" cy="91" rx="16" ry="5" fill="#94a3b8" stroke="#64748b" stroke-width="1.5"/>' +
+            '<circle cx="60" cy="102" r="4.5" fill="#38bdf8" stroke="#0284c7" stroke-width="1.4"/>' +
+            '<polygon points="75,98 76.4,101 79.5,101.3 77,103.2 77.8,106.2 75,104.5 72.2,106.2 73,103.2 70.5,101.3 73.6,101" fill="#f59e0b"/>';
+        } else if (prof.includes("farmer") || prof.includes("gardener")) {
+          bodyColor = "#f59e0b";
+          collarMarkup =
+            '<rect x="43" y="92" width="6" height="22" rx="2" fill="#2563eb"/>' +
+            '<rect x="71" y="92" width="6" height="22" rx="2" fill="#2563eb"/>' +
+            '<rect x="43" y="102" width="34" height="14" rx="3" fill="#2563eb"/>' +
+            '<circle cx="46" cy="104" r="2" fill="#fde047"/>' +
+            '<circle cx="74" cy="104" r="2" fill="#fde047"/>';
+          hatMarkup =
+            '<g>' +
+              '<ellipse cx="60" cy="28" rx="33" ry="6.5" fill="#facc15" stroke="#ca8a04" stroke-width="1.6"/>' +
+              '<path d="M43 27 C45 15 75 15 77 27 Z" fill="#fde047" stroke="#ca8a04" stroke-width="1.5"/>' +
+              '<path d="M43 25 Q60 28 77 25" fill="none" stroke="#dc2626" stroke-width="2.6"/>' +
+            '</g>';
+        } else if (prof.includes("painter") || prof.includes("artist")) {
+          bodyColor = "#f8fafc";
+          collarMarkup =
+            '<path d="M36 101 Q60 97 84 101" stroke="#334155" stroke-width="2.6" fill="none"/>' +
+            '<path d="M34 108 Q60 104 86 108" stroke="#334155" stroke-width="2.6" fill="none"/>' +
+            '<path d="M47 90 Q60 98 73 90 L70 97 Q60 101 50 97 Z" fill="#ec4899"/>';
+          hatMarkup =
+            '<g>' +
+              '<path d="M36 30 C35 16 68 12 84 25 C87 28 84 32 76 31 Q56 26 36 30 Z" fill="#be185d" stroke="#831843" stroke-width="1.5"/>' +
+              '<path d="M60 16 Q63 11 66 13" fill="none" stroke="#831843" stroke-width="2.2" stroke-linecap="round"/>' +
+            '</g>';
+        } else if (prof.includes("clerk") || prof.includes("librarian") || prof.includes("teacher") || prof.includes("scientist")) {
+          bodyColor = "#6366f1";
+          collarMarkup =
+            '<path d="M48 89 L60 98 L72 89 L67 98 L60 94 L53 98 Z" fill="#ffffff"/>' +
+            '<path d="M55 96 L60 99 L65 96 L65 102 L60 99 L55 102 Z" fill="#f43f5e"/>';
+          glassesMarkup =
+            '<g opacity="0.92">' +
+              '<circle cx="47" cy="60" r="8.2" fill="rgba(255,255,255,0.22)" stroke="#334155" stroke-width="1.9"/>' +
+              '<circle cx="73" cy="60" r="8.2" fill="rgba(255,255,255,0.22)" stroke="#334155" stroke-width="1.9"/>' +
+              '<path d="M55.2 60 Q60 58 64.8 60" fill="none" stroke="#334155" stroke-width="1.8"/>' +
+            '</g>';
+        } else if (prof.includes("doctor") || prof.includes("nurse") || prof.includes("medic")) {
+          bodyColor = "#ffffff";
+          collarMarkup =
+            '<path d="M48 89 L60 105 L72 89 Z" fill="#38bdf8"/>' +
+            '<path d="M48 89 L56 105 L44 103 Z" fill="#f1f5f9"/>' +
+            '<path d="M72 89 L64 105 L76 103 Z" fill="#f1f5f9"/>' +
+            '<path d="M72 98 H78 M75 95 V101" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round"/>';
+        }
+
+        // Back hair shapes (0..9)
+        let backHair = "";
+        if (hairStyle === 1) {
+          // Cute high ponytail
+          backHair =
+            '<path d="M76 34 C96 28 103 54 91 74 C85 83 78 76 80 65 C83 54 81 44 74 42 Z" fill="' + hair.dark + '"/>' +
+            '<circle cx="79" cy="36" r="5" fill="#f43f5e"/>';
+        } else if (hairStyle === 2) {
+          // Twin-tails with ribbons
+          backHair =
+            '<path d="M36 42 C18 46 14 74 26 88 C32 94 38 84 35 72 Z" fill="' + hair.dark + '"/>' +
+            '<path d="M84 42 C102 46 106 74 94 88 C88 94 82 84 85 72 Z" fill="' + hair.dark + '"/>' +
+            '<circle cx="33" cy="45" r="4.5" fill="#fb7185"/>' +
+            '<circle cx="87" cy="45" r="4.5" fill="#fb7185"/>';
+        } else if (hairStyle === 3) {
+          // Soft bob cut
+          backHair =
+            '<path d="M27 52 C26 76 35 88 45 88 L75 88 C85 88 94 76 93 52 C92 26 76 20 60 20 C44 20 28 26 27 52 Z" fill="' + hair.dark + '"/>';
+        } else if (hairStyle === 4) {
+          // Cute top bun (odango)
+          backHair =
+            '<circle cx="60" cy="18" r="13" fill="' + hair.main + '" stroke="' + hair.dark + '" stroke-width="1.5"/>' +
+            '<path d="M51 24 Q60 28 69 24" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>' +
+            '<path d="M30 50 C29 72 36 84 46 84 L74 84 C84 84 91 72 90 50 Z" fill="' + hair.dark + '"/>';
+        } else if (hairStyle === 5) {
+          // Wavy long anime hair
+          backHair =
+            '<path d="M25 50 C22 72 20 96 34 104 L86 104 C100 96 98 72 95 50 C92 24 77 18 60 18 C43 18 28 24 25 50 Z" fill="' + hair.dark + '"/>';
+        } else if (hairStyle === 6) {
+          // Fluffy curls
+          backHair =
+            '<g fill="' + hair.dark + '">' +
+              '<circle cx="30" cy="56" r="13"/><circle cx="90" cy="56" r="13"/>' +
+              '<circle cx="34" cy="74" r="12"/><circle cx="86" cy="74" r="12"/>' +
+              '<circle cx="60" cy="34" r="30"/>' +
+            '</g>';
+        } else if (hairStyle === 8) {
+          // Side braids
+          backHair =
+            '<path d="M32 54 C28 74 28 94 36 102 C41 102 42 86 40 68 Z" fill="' + hair.dark + '"/>' +
+            '<path d="M88 54 C92 74 92 94 84 102 C79 102 78 86 80 68 Z" fill="' + hair.dark + '"/>' +
+            '<circle cx="36" cy="96" r="3.5" fill="#fbbf24"/>' +
+            '<circle cx="84" cy="96" r="3.5" fill="#fbbf24"/>';
+        } else {
+          // Short neat back hair (0, 7, 9)
+          backHair =
+            '<path d="M29 52 C29 68 35 76 42 78 L78 78 C85 76 91 68 91 52 C91 27 77 20 60 20 C43 20 29 27 29 52 Z" fill="' + hair.dark + '"/>';
+        }
+
+        // Front bangs + side locks
+        let frontHair = "";
+        if (hairStyle === 0) {
+          // Spiky anime shonen bangs
+          frontHair =
+            '<path d="M29 55 C28 30 43 19 60 19 C77 19 92 30 91 55 C88 45 84 38 79 44 L75 34 L67 48 L60 33 L52 48 L44 35 L39 45 C35 39 32 45 29 55 Z" fill="' + hair.main + '"/>';
+        } else if (hairStyle === 3 || hairStyle === 2) {
+          // Cute hime / straight anime bangs with side locks
+          frontHair =
+            '<path d="M28 58 C27 30 42 19 60 19 C78 19 93 30 92 58 L87 72 C85 58 84 48 82 43 L74 47 L71 42 L61 47 L56 41 L46 47 L42 42 L38 45 C36 50 35 58 33 72 Z" fill="' + hair.main + '"/>';
+        } else if (hairStyle === 6) {
+          // Fluffy curly bangs
+          frontHair =
+            '<g fill="' + hair.main + '">' +
+              '<circle cx="42" cy="33" r="13"/><circle cx="60" cy="29" r="14"/><circle cx="78" cy="33" r="13"/>' +
+              '<circle cx="33" cy="44" r="9"/><circle cx="87" cy="44" r="9"/>' +
+            '</g>';
+        } else {
+          // Soft swept anime fringe with side strands
+          frontHair =
+            '<path d="M28 56 C27 28 42 19 60 19 C78 19 93 28 92 56 L86 67 C85 52 82 44 76 40 C72 47 64 50 56 44 C50 49 43 48 39 42 C36 48 35 55 34 67 Z" fill="' + hair.main + '"/>';
+        }
+
+        // Cute hair shine halo + optional ahoge / hairclip
+        const hairShine =
+          '<path d="M42 32 Q51 27 57 31" fill="none" stroke="' + hair.shine + '" stroke-width="2.6" stroke-linecap="round" opacity="0.72"/>' +
+          '<path d="M65 30 Q73 27 79 32" fill="none" stroke="' + hair.shine + '" stroke-width="2.4" stroke-linecap="round" opacity="0.65"/>';
+
+        const ahogeMarkup = (!hatMarkup && hasAhoge)
+          ? '<path d="M59 20 Q62 8 71 13 Q64 14 63 20 Z" fill="' + hair.main + '"/>'
+          : "";
+
+        const clipMarkup = (!hatMarkup && hasRibbon)
+          ? '<g transform="translate(76,38) rotate(18)"><rect x="-5" y="-2" width="10" height="4" rx="2" fill="#f472b6"/><circle cx="0" cy="0" r="2.1" fill="#fef08a"/></g>'
+          : "";
+
+        // Eyes & Eyebrows
+        let eyesMarkup = "";
+        const isRevCrim = isRevealed && status === "CRIMINAL";
+        const isRevInno = isRevealed && status === "INNOCENT";
+
+        if (!isRevCrim && baseEyeStyle === 3) {
+          // Super cute happy smiling anime eyes (^ ^)
+          eyesMarkup =
+            '<path d="M40 61 Q47 53 54 61" fill="none" stroke="#2c2438" stroke-width="3" stroke-linecap="round"/>' +
+            '<path d="M66 61 Q73 53 80 61" fill="none" stroke="#2c2438" stroke-width="3" stroke-linecap="round"/>' +
+            '<path d="M40 50 Q47 47 53 50" fill="none" stroke="' + hair.dark + '" stroke-width="2" stroke-linecap="round"/>' +
+            '<path d="M67 50 Q73 47 80 50" fill="none" stroke="' + hair.dark + '" stroke-width="2" stroke-linecap="round"/>';
+        } else {
+          // Big glossy chibi anime eyes with dual sparkle catchlights
+          const leftBrow = isRevCrim
+            ? '<path d="M40 49 L54 53" fill="none" stroke="' + hair.dark + '" stroke-width="2.4" stroke-linecap="round"/>'
+            : '<path d="M40 50 Q47 47 53 49" fill="none" stroke="' + hair.dark + '" stroke-width="2.1" stroke-linecap="round"/>';
+          const rightBrow = isRevCrim
+            ? '<path d="M80 49 L66 53" fill="none" stroke="' + hair.dark + '" stroke-width="2.4" stroke-linecap="round"/>'
+            : '<path d="M67 49 Q73 47 80 50" fill="none" stroke="' + hair.dark + '" stroke-width="2.1" stroke-linecap="round"/>';
+
+          const rightEye = (!isRevCrim && !isRevInno && baseEyeStyle === 2)
+            // Cute anime wink on right eye
+            ? '<path d="M66 61 Q73 55 80 61" fill="none" stroke="#2c2438" stroke-width="3" stroke-linecap="round"/>'
+            : (
+              '<ellipse cx="73" cy="60" rx="6.6" ry="7.4" fill="#ffffff"/>' +
+              '<ellipse cx="73" cy="60.5" rx="5.3" ry="6.2" fill="' + eye.main + '"/>' +
+              '<ellipse cx="73" cy="63" rx="3.7" ry="2.8" fill="' + eye.light + '" opacity="0.85"/>' +
+              '<circle cx="73" cy="59.2" r="2.7" fill="#1e1b2e"/>' +
+              '<circle cx="70.8" cy="57.2" r="2.1" fill="#ffffff"/>' +
+              '<circle cx="75.3" cy="63" r="1.1" fill="#ffffff"/>' +
+              '<path d="M65.8 57.5 Q73 51.5 80.5 57.2" fill="none" stroke="#1e1b2e" stroke-width="2.8" stroke-linecap="round"/>'
+            );
+
+          eyesMarkup =
+            leftBrow + rightBrow +
+            '<ellipse cx="47" cy="60" rx="6.6" ry="7.4" fill="#ffffff"/>' +
+            '<ellipse cx="47" cy="60.5" rx="5.3" ry="6.2" fill="' + eye.main + '"/>' +
+            '<ellipse cx="47" cy="63" rx="3.7" ry="2.8" fill="' + eye.light + '" opacity="0.85"/>' +
+            '<circle cx="47" cy="59.2" r="2.7" fill="#1e1b2e"/>' +
+            '<circle cx="44.8" cy="57.2" r="2.1" fill="#ffffff"/>' +
+            '<circle cx="49.3" cy="63" r="1.1" fill="#ffffff"/>' +
+            '<path d="M39.5 57.2 Q47 51.5 54.2 57.5" fill="none" stroke="#1e1b2e" stroke-width="2.8" stroke-linecap="round"/>' +
+            rightEye;
+        }
+
+        // Cute anime mouth
+        let mouthMarkup = "";
+        if (isRevCrim) {
+          // Playful mischievous smirk
+          mouthMarkup = '<path d="M54 74 Q61 77 67 72" fill="none" stroke="#9f1239" stroke-width="2.2" stroke-linecap="round"/>';
+        } else if (isRevInno || mouthStyle === 1) {
+          // Happy cheerful smile
+          mouthMarkup = '<path d="M54 73 Q60 79 66 73 Z" fill="#fb7185" stroke="#9f1239" stroke-width="1.3"/>';
+        } else if (mouthStyle === 2) {
+          // Cute cat-smile (:3)
+          mouthMarkup = '<path d="M53 74 Q56.5 77.5 60 74 Q63.5 77.5 67 74" fill="none" stroke="#9f5858" stroke-width="2" stroke-linecap="round"/>';
+        } else {
+          // Gentle warm smile
+          mouthMarkup = '<path d="M55 74 Q60 78 65 74" fill="none" stroke="#9f5858" stroke-width="2.1" stroke-linecap="round"/>';
+        }
+
+        // Cute anime blush + sparkles
+        const blushMarkup =
+          '<ellipse cx="38" cy="68" rx="5.8" ry="3.2" fill="#ff8fab" opacity="0.48"/>' +
+          '<ellipse cx="82" cy="68" rx="5.8" ry="3.2" fill="#ff8fab" opacity="0.48"/>' +
+          '<circle cx="60" cy="67" r="1.1" fill="' + skin.shade + '"/>';
+
+        let statusSparkles = "";
+        if (isRevInno) {
+          statusSparkles =
+            '<path d="M18 26 L20 20 L22 26 L28 28 L22 30 L20 36 L18 30 L12 28 Z" fill="#10b981" opacity="0.85"/>' +
+            '<circle cx="100" cy="30" r="3" fill="#34d399" opacity="0.85"/>';
+        } else if (isRevCrim) {
+          statusSparkles =
+            '<g transform="translate(95,24)">' +
+              '<circle cx="0" cy="0" r="9" fill="#ef4444"/>' +
+              '<rect x="-1.5" y="-5" width="3" height="6.5" rx="1.4" fill="#ffffff"/>' +
+              '<circle cx="0" cy="4.2" r="1.6" fill="#ffffff"/>' +
+            '</g>';
+        } else {
+          statusSparkles =
+            '<circle cx="20" cy="28" r="2.4" fill="#ffffff" opacity="0.75"/>' +
+            '<circle cx="99" cy="34" r="2" fill="#ffffff" opacity="0.75"/>';
+        }
+
+        const cls = escapeHtml(sizeClass || "avatar-large");
+        return (
+          '<div class="avatar-wrap">' +
+            '<svg class="' + cls + '" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+              '<circle cx="60" cy="62" r="52" fill="' + haloBg + '"/>' +
+              '<circle cx="60" cy="62" r="52" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2.5"/>' +
+              statusSparkles +
+              backHair +
+              // Shoulders & cute outfit
+              '<path d="M26 112 C28 92 42 86 60 86 C78 86 92 92 94 112 Z" fill="' + bodyColor + '" stroke="rgba(30,41,59,0.16)" stroke-width="1.5"/>' +
+              collarMarkup +
+              // Neck & shadow
+              '<rect x="53" y="80" width="14" height="12" rx="5" fill="' + skin.shade + '"/>' +
+              // Ears
+              '<circle cx="31" cy="60" r="6" fill="' + skin.base + '"/>' +
+              '<circle cx="89" cy="60" r="6" fill="' + skin.base + '"/>' +
+              // Chibi anime head
+              '<path d="M32 54 C32 82 46 87 60 87 C74 87 88 82 88 54 C88 28 75 24 60 24 C45 24 32 28 32 54 Z" fill="' + skin.base + '"/>' +
+              // Soft anime blush, eyes, mouth, glasses
+              blushMarkup +
+              eyesMarkup +
+              mouthMarkup +
+              glassesMarkup +
+              // Front bangs, shine, hair accessories & profession hat
+              frontHair +
+              hairShine +
+              ahogeMarkup +
+              clipMarkup +
+              hatMarkup +
+            '</svg>' +
+          '</div>'
+        );
+      }
+
+      function renderStylizedClueHtml(rawText) {
+        let html = escapeHtml(rawText);
+        // Highlight coordinates like (A1), B2 cleanly
+        html = html.replace(/\b([A-Z][1-9])\b/g, '<span class="clue-kw-coord">$1</span>');
+        // Highlight region keywords
+        html = html.replace(/\b(row\s+\d+|column\s+[A-Z]|neighbors?|boundary|corners?)\b/gi, '<span class="clue-kw-region">$1</span>');
+        // Highlight roles
+        html = html.replace(/\b(criminals?|innocents?)\b/gi, '<span class="clue-kw-role">$1</span>');
+        return html;
+      }
+
+      function renderBoard() {
+        const state = ui.publicState;
+        if (!state) {
+          el.boardGrid.innerHTML = "";
+          return;
+        }
+
+        const size = Number(state.size);
+        const hasRegionFocus = Array.isArray(ui.highlightCells) && ui.highlightCells.length > 0;
+        el.boardGrid.style.setProperty("--grid-size", String(size));
+        el.boardGrid.className =
+          "board-grid grid-size-" + Math.min(5, Math.max(3, size)) +
+          (hasRegionFocus ? " has-region-focus" : "");
+
+        const regionSet = new Set(ui.highlightCells);
+        const hintClueSet = new Set(ui.hintClueCells);
+        const frag = document.createDocumentFragment();
+
+        const corner = document.createElement("div");
+        corner.className = "axis-corner";
+        frag.appendChild(corner);
+
+        for (let c = 0; c < size; c++) {
+          const colHead = document.createElement("div");
+          colHead.className = "axis-col";
+          colHead.textContent = String.fromCharCode(65 + c);
+          frag.appendChild(colHead);
+        }
+
+        const zoomBadgeHtml =
+          '<span class="clue-zoom-badge" title="Active clue highlight">' +
+            '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">' +
+              '<circle cx="11" cy="11" r="7"></circle>' +
+              '<line x1="21" y1="21" x2="16.65" y2="16.65"></line>' +
+            '</svg>' +
+          '</span>';
+
+        for (let r = 0; r < size; r++) {
+          const rowHead = document.createElement("div");
+          rowHead.className = "axis-row";
+          rowHead.textContent = String(r + 1);
+          frag.appendChild(rowHead);
+
+          for (let c = 0; c < size; c++) {
+            const coord = String.fromCharCode(65 + c) + String(r + 1);
+            const cell = state.cells[coord];
+            const isRevealed = Boolean(cell && cell.is_revealed);
+
+            const card = document.createElement("div");
+            const classes = ["card"];
+            if (!isRevealed) {
+              classes.push("is-hidden");
+            } else if (cell.status === "CRIMINAL") {
+              classes.push("is-criminal");
+            } else {
+              classes.push("is-innocent");
+            }
+
+            if (regionSet.has(coord)) classes.push("is-region");
+            if (ui.highlightOwner === coord) classes.push("is-clue-owner");
+            if (hintClueSet.has(coord)) classes.push("is-hint-clue");
+            if (!isRevealed && ui.selectedCoord === coord) classes.push("is-selected");
+            if (!isRevealed && ui.hintCoord === coord) classes.push("is-hint-target");
+            if (ui.lastFlippedCoord === coord) classes.push("just-flipped");
+
+            card.className = classes.join(" ");
+            card.dataset.coord = coord;
+
+            const charName = cell ? cell.name : "";
+            const charProf = cell ? cell.profession : "";
+
+            if (!isRevealed) {
+              const avatarHtml = renderAnimeAvatar(charName, charProf, null, false, "avatar-large");
+              card.innerHTML =
+                '<div class="card-head">' +
+                  '<span class="card-coord">' + escapeHtml(coord) + '</span>' +
+                  '<span class="status-pill">?</span>' +
+                '</div>' +
+                '<div class="card-hidden-body">' +
+                  avatarHtml +
+                  '<div class="card-name">' + escapeHtml(charName) + '</div>' +
+                  '<div class="card-prof">' + escapeHtml(charProf) + '</div>' +
+                '</div>';
+            } else {
+              const pillClass = cell.status === "CRIMINAL" ? "status-pill criminal" : "status-pill innocent";
+              const avatarHtml = renderAnimeAvatar(charName, charProf, cell.status, true, "avatar-compact");
+              const clueHtml = renderStylizedClueHtml(formatClueText(cell.clue));
+              const badgeHtml = ui.highlightOwner === coord ? zoomBadgeHtml : "";
+
+              card.innerHTML =
+                badgeHtml +
+                '<div class="card-head">' +
+                  '<span class="card-coord">' + escapeHtml(coord) + '</span>' +
+                  '<span class="' + pillClass + '">' + escapeHtml(cell.status) + '</span>' +
+                '</div>' +
+                '<div class="card-revealed-identity">' +
+                  avatarHtml +
+                  '<div class="card-identity-text">' +
+                    '<div class="card-name">' + escapeHtml(charName) + '</div>' +
+                    '<div class="card-prof">' + escapeHtml(charProf) + '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="card-clue"><span>' + clueHtml + '</span></div>';
+            }
+
+            card.addEventListener("click", function () {
+              handleCardClick(coord);
+            });
+
+            frag.appendChild(card);
+          }
+        }
+
+        el.boardGrid.innerHTML = "";
+        el.boardGrid.appendChild(frag);
+        ui.lastFlippedCoord = null;
+      }
+
+      function summarizeSatQueries(entry) {
+        const queries = Array.isArray(entry.sat_queries) ? entry.sat_queries : [];
+        if (queries.length === 0) return "SAT: 0 queries";
+
+        const coord = entry.selected_coord;
+        const targetQueries = coord
+          ? queries.filter(q => q.target_coord === coord)
+          : queries.slice(-2);
+
+        const parts = (targetQueries.length ? targetQueries : queries.slice(-2)).map(q => {
+          const target = q.target_coord || "?";
+          if (target === "KB") {
+            return "KB: " + q.result;
+          }
+          const lit = q.assumed_verdict === "INNOCENT" ? "¬C_" + target : "C_" + target;
+          return "KB ∧ " + lit + " → " + q.result;
+        });
+
+        return "SAT (" + queries.length + "): " + parts.join(" | ");
+      }
+
+      function renderTraceHistory() {
+        const list = ui.traceHistory || [];
+        el.traceCount.textContent = list.length === 1 ? "1 step" : list.length + " steps";
+
+        if (list.length === 0) {
+          el.traceList.innerHTML = '<div class="trace-empty">No deduction steps yet. Make a provable move or press Auto Solve.</div>';
+          return;
+        }
+
+        const frag = document.createDocumentFragment();
+        list.forEach(entry => {
+          const item = document.createElement("div");
+          const verdict = String(entry.verdict || "UNKNOWN").toUpperCase();
+          item.className = "trace-item verdict-" + verdict;
+
+          const coord = entry.selected_coord || "-";
+          const activeClues = Array.isArray(entry.active_clue_ids) && entry.active_clue_ids.length
+            ? entry.active_clue_ids.join(", ")
+            : "none";
+          const sourceLabel = entry.source || "AUTO";
+          const pillClass = verdict === "CRIMINAL"
+            ? "status-pill criminal"
+            : (verdict === "INNOCENT" ? "status-pill innocent" : "status-pill");
+          const clueText = entry.revealed_clue_text || (entry.revealed_clue ? formatClueText(entry.revealed_clue) : "");
+
+          let html =
+            '<div class="trace-top">' +
+              '<span class="trace-step-label">Step #' + escapeHtml(entry.step) + ' · ' + escapeHtml(coord) + '</span>' +
+              '<span style="display:inline-flex;align-items:center;gap:6px;">' +
+                '<span class="trace-source">' + escapeHtml(sourceLabel) + '</span>' +
+                '<span class="' + pillClass + '">' + escapeHtml(verdict) + '</span>' +
+              '</span>' +
+            '</div>' +
+            '<div class="trace-meta">Active clues: <strong>' + escapeHtml(activeClues) + '</strong></div>' +
+            '<div class="trace-sat">' + escapeHtml(summarizeSatQueries(entry)) + '</div>';
+
+          if (clueText) {
+            html += '<div class="trace-clue">New clue: ' + escapeHtml(clueText) + '</div>';
+          }
+
+          item.innerHTML = html;
+          frag.appendChild(item);
+        });
+
+        el.traceList.innerHTML = "";
+        el.traceList.appendChild(frag);
+        el.traceList.scrollTop = el.traceList.scrollHeight;
+      }
+
+      function renderAll() {
+        renderHeaderAndSidebar();
+        renderBoard();
+        renderTraceHistory();
+      }
+
+      async function handleCardClick(coord) {
+        if (ui.isAutoSolving || !ui.publicState) return;
+        const cell = ui.publicState.cells[coord];
+        if (!cell) return;
+
+        if (cell.is_revealed) {
+          if (ui.highlightOwner === coord) {
+            clearTransientHighlights();
+            setBanner("INFO", "Cleared clue region highlight for " + coord + ".", "");
+            renderAll();
+            return;
+          }
+          try {
+            const data = await apiRequest("/api/highlight?coord=" + encodeURIComponent(coord));
+            ui.hintCoord = null;
+            ui.hintVerdict = null;
+            ui.hintClueCells = [];
+            ui.highlightOwner = data.coord;
+            ui.highlightCells = Array.isArray(data.cells) ? data.cells : [];
+            if (ui.highlightCells.length > 0) {
+              setBanner("CLUE_REGION", "Highlighting clue from " + data.coord + ": referenced cells = " + ui.highlightCells.join(", ") + ".", "");
+            } else {
+              setBanner("CLUE_REGION", "Clue at " + data.coord + " has no referenced cells to highlight.", "");
+            }
+            renderAll();
+          } catch (err) {
+            setBanner("ERROR", err.message, "error");
+          }
+        } else {
+          ui.selectedCoord = coord;
+          renderAll();
+        }
+      }
+
+      async function submitVerdict(verdict) {
+        if (ui.isAutoSolving || !ui.selectedCoord) return;
+        const coord = ui.selectedCoord;
+        try {
+          const data = await apiRequest("/api/verdict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ coord: coord, verdict: verdict }),
+          });
+
+          const result = data.result || {};
+          ui.publicState = data.public_state;
+          ui.traceHistory = data.trace_history || ui.traceHistory;
+          ui.gameStatus = data.game_status || ui.gameStatus;
+
+          const code = result.code || "INVALID";
+          if (code === "ACCEPTED") {
+            ui.lastFlippedCoord = result.coord;
+            ui.selectedCoord = null;
+            ui.hintCoord = null;
+            ui.hintVerdict = null;
+            ui.hintClueCells = [];
+            if (result.is_solved) {
+              setBanner("SOLVED", "Case Solved! " + result.message + " All cards are now revealed.", "solved");
+            } else {
+              const clueTxt = result.revealed_clue ? " New clue: " + formatClueText(result.revealed_clue) : "";
+              setBanner("ACCEPTED", result.message + clueTxt, "success");
+            }
+          } else if (code === "NOT_PROVABLE") {
+            setBanner("NOT_PROVABLE", "Cannot be proven yet from current clues — no guessing allowed. (" + result.message + ")", "warn");
+          } else if (code === "CONTRADICTED") {
+            setBanner("CONTRADICTED", "Contradicts currently revealed clues. (" + result.message + ")", "error");
+          } else if (code === "INCONSISTENT") {
+            setBanner("INCONSISTENT", "Revealed clues are mutually inconsistent (UNSAT). (" + result.message + ")", "error");
+          } else {
+            setBanner(code, result.message || "Invalid verdict.", "error");
+          }
+          renderAll();
+        } catch (err) {
+          setBanner("ERROR", err.message, "error");
+        }
+      }
+
+      async function requestHint() {
+        if (ui.isAutoSolving || !ui.publicState) return;
+        try {
+          const data = await apiRequest("/api/hint", { method: "POST" });
+          ui.publicState = data.public_state;
+          ui.gameStatus = data.game_status || ui.gameStatus;
+          ui.highlightOwner = null;
+          ui.highlightCells = [];
+
+          const hint = data.hint;
+          if (ui.publicState.is_solved) {
+            clearTransientHighlights();
+            setBanner("SOLVED", "Puzzle is already completely solved!", "solved");
+          } else if (!hint) {
+            clearTransientHighlights();
+            setBanner("UNKNOWN", "Hint: No forced move exists from currently revealed clues (UNKNOWN — no guessing allowed).", "warn");
+          } else if (hint.verdict === "INCONSISTENT" || !hint.target_coord) {
+            ui.hintCoord = null;
+            ui.hintVerdict = "INCONSISTENT";
+            ui.hintClueCells = hint.active_clue_ids || [];
+            setBanner("INCONSISTENT", "Hint: Revealed clues (" + (ui.hintClueCells.join(", ") || "none") + ") are mutually inconsistent (UNSAT).", "error");
+          } else {
+            ui.hintCoord = hint.target_coord;
+            ui.hintVerdict = hint.verdict;
+            ui.hintClueCells = hint.active_clue_ids || [];
+            ui.selectedCoord = hint.target_coord;
+            setBanner(
+              "HINT",
+              "Forced move found: " + hint.target_coord + " must be " + hint.verdict +
+              " (Active clues: " + (ui.hintClueCells.join(", ") || "none") + ").",
+              "warn"
+            );
+          }
+          renderAll();
+        } catch (err) {
+          setBanner("ERROR", err.message, "error");
+        }
+      }
+
+      function stopAutoSolve(silent) {
+        if (ui.autoSolveTimer !== null) {
+          clearTimeout(ui.autoSolveTimer);
+          ui.autoSolveTimer = null;
+        }
+        const wasRunning = ui.isAutoSolving;
+        ui.isAutoSolving = false;
+        if (wasRunning && !silent) {
+          setBanner("STOPPED", "Auto Solve paused by user.", "");
+        }
+        updateControls();
+      }
+
+      async function runAutoSolveStep() {
+        if (!ui.isAutoSolving) return;
+        try {
+          const data = await apiRequest("/api/step", { method: "POST" });
+          ui.publicState = data.public_state;
+          ui.traceHistory = data.trace_history || ui.traceHistory;
+          ui.gameStatus = data.game_status || ui.gameStatus;
+
+          const trace = data.trace;
+          if (!trace) {
+            stopAutoSolve(true);
+            if (ui.publicState.is_solved) {
+              setBanner("SOLVED", "Case Solved! All cards have been deduced without guessing.", "solved");
+            }
+            renderAll();
+            return;
+          }
+
+          clearTransientHighlights();
+          ui.selectedCoord = null;
+
+          if (trace.verdict === "INCONSISTENT") {
+            stopAutoSolve(true);
+            setBanner("INCONSISTENT", "Auto Solve halted: revealed clues are mutually inconsistent (UNSAT).", "error");
+            renderAll();
+            return;
+          }
+
+          if (trace.verdict === "UNKNOWN" || !trace.selected_coord) {
+            stopAutoSolve(true);
+            setBanner("UNKNOWN", "Auto Solve halted: no logically forced move exists (UNKNOWN — no guessing allowed).", "warn");
+            renderAll();
+            return;
+          }
+
+          ui.lastFlippedCoord = trace.selected_coord;
+          ui.hintClueCells = trace.active_clue_ids || [];
+
+          if (ui.publicState.is_solved) {
+            stopAutoSolve(true);
+            setBanner(
+              "SOLVED",
+              "Case Solved! Step #" + trace.step + " deduced " + trace.selected_coord + " = " + trace.verdict + ".",
+              "solved"
+            );
+            renderAll();
+            return;
+          }
+
+          const newClueTxt = trace.revealed_clue ? " New clue: " + formatClueText(trace.revealed_clue) : "";
+          setBanner(
+            "AUTO_STEP",
+            "Step #" + trace.step + ": Deduced " + trace.selected_coord + " = " + trace.verdict + "." + newClueTxt,
+            "success"
+          );
+          renderAll();
+
+          if (ui.isAutoSolving) {
+            ui.autoSolveTimer = setTimeout(runAutoSolveStep, AUTO_SOLVE_INTERVAL_MS);
+          }
+        } catch (err) {
+          stopAutoSolve(true);
+          setBanner("ERROR", "Auto Solve error: " + err.message, "error");
+          renderAll();
+        }
+      }
+
+      function startAutoSolve() {
+        if (ui.isAutoSolving || !ui.publicState || ui.publicState.is_solved) return;
+        ui.isAutoSolving = true;
+        clearTransientHighlights();
+        ui.selectedCoord = null;
+        setBanner("AUTO_SOLVE", "Running progressive No-Guess SAT deduction...", "");
+        updateControls();
+        runAutoSolveStep();
+      }
+
+      async function restartGame() {
+        stopAutoSolve(true);
+        try {
+          const data = await apiRequest("/api/restart", { method: "POST" });
+          ui.publicState = data.public_state;
+          ui.traceHistory = data.trace_history || [];
+          ui.gameStatus = data.game_status || "PLAYING";
+          ui.selectedCoord = null;
+          clearTransientHighlights();
+          setBanner(
+            "RESTARTED",
+            "Restarted '" + ui.publicState.title + "'. Initial revealed: " +
+              ((ui.publicState.revealed_cells || []).join(", ") || "none") + ".",
+            ""
+          );
+          renderAll();
+        } catch (err) {
+          setBanner("ERROR", err.message, "error");
+        }
+      }
+
+      async function openLoadModal() {
+        if (ui.isAutoSolving) return;
+        el.fileUploadInput.value = "";
+        el.loadModal.classList.add("open");
+        el.loadModal.setAttribute("aria-hidden", "false");
+        el.puzzleList.innerHTML = '<div class="trace-empty">Loading puzzles...</div>';
+
+        try {
+          const data = await apiRequest("/api/puzzles");
+          const puzzles = data.puzzles || [];
+          if (puzzles.length === 0) {
+            el.puzzleList.innerHTML = '<div class="trace-empty">No JSON puzzles found in data/puzzles/. Upload a JSON file below.</div>';
+            return;
+          }
+          const frag = document.createDocumentFragment();
+          puzzles.forEach(item => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "puzzle-option";
+            btn.innerHTML =
+              '<div>' +
+                '<div class="puzzle-option-title">' + escapeHtml(item.title || item.filename) + '</div>' +
+                '<div class="puzzle-option-meta">' + escapeHtml(item.filename) + ' · id: ' + escapeHtml(item.puzzle_id || "-") + '</div>' +
+              '</div>' +
+              '<span class="meta-pill" style="background:#e2e8f0;color:#0f172a;">' + escapeHtml(item.size) + 'x' + escapeHtml(item.size) + '</span>';
+            btn.addEventListener("click", function () {
+              loadPuzzlePayload({ filename: item.filename });
+            });
+            frag.appendChild(btn);
+          });
+          el.puzzleList.innerHTML = "";
+          el.puzzleList.appendChild(frag);
+        } catch (err) {
+          el.puzzleList.innerHTML = '<div class="trace-empty">Failed to list puzzles: ' + escapeHtml(err.message) + '</div>';
+        }
+      }
+
+      function closeLoadModal() {
+        el.loadModal.classList.remove("open");
+        el.loadModal.setAttribute("aria-hidden", "true");
+      }
+
+      async function loadPuzzlePayload(payload) {
+        stopAutoSolve(true);
+        try {
+          const data = await apiRequest("/api/load", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          ui.publicState = data.public_state;
+          ui.traceHistory = data.trace_history || [];
+          ui.gameStatus = data.game_status || "PLAYING";
+          ui.backend = data.backend || ui.backend;
+          ui.selectedCoord = null;
+          clearTransientHighlights();
+          closeLoadModal();
+          setBanner(
+            "LOADED",
+            "Loaded '" + ui.publicState.title + "' (" + ui.publicState.size + "x" + ui.publicState.size +
+              "). Initial revealed: " + ((ui.publicState.revealed_cells || []).join(", ") || "none") + ".",
+            ""
+          );
+          renderAll();
+        } catch (err) {
+          closeLoadModal();
+          setBanner("LOAD_ERROR", "Failed to load puzzle: " + err.message, "error");
+        }
+      }
+
+      async function handleFileUpload(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        try {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          await loadPuzzlePayload({ puzzle_data: parsed });
+        } catch (err) {
+          closeLoadModal();
+          setBanner("LOAD_ERROR", "Invalid JSON file '" + file.name + "': " + err.message, "error");
+        }
+      }
+
+      async function initApp() {
+        try {
+          const data = await apiRequest("/api/state");
+          ui.publicState = data.public_state;
+          ui.traceHistory = data.trace_history || [];
+          ui.backend = data.backend || "Logic Engine";
+          ui.gameStatus = data.game_status || "PLAYING";
+          if (ui.publicState) {
+            setBanner(
+              "READY",
+              "Loaded '" + ui.publicState.title + "' (" + ui.publicState.size + "x" + ui.publicState.size +
+                "). Click a face-down card to deduce, or a revealed card to highlight its clue region.",
+              ""
+            );
+          }
+          renderAll();
+        } catch (err) {
+          setBanner("ERROR", "Unable to fetch initial state: " + err.message, "error");
+        }
+      }
+
+      // Wire controls
+      el.btnLoad.addEventListener("click", openLoadModal);
+      el.btnCloseModal.addEventListener("click", closeLoadModal);
+      el.loadModal.addEventListener("click", function (event) {
+        if (event.target === el.loadModal) closeLoadModal();
+      });
+      el.fileUploadInput.addEventListener("change", handleFileUpload);
+      el.btnRestart.addEventListener("click", restartGame);
+      el.btnHint.addEventListener("click", requestHint);
+      el.btnAutoSolve.addEventListener("click", startAutoSolve);
+      el.btnStop.addEventListener("click", function () { stopAutoSolve(false); });
+      el.btnClearHighlight.addEventListener("click", function () {
+        clearTransientHighlights();
+        setBanner("INFO", "Cleared active highlights.", "");
+        renderAll();
+      });
+      el.btnCallCriminal.addEventListener("click", function () { submitVerdict("CRIMINAL"); });
+      el.btnCallInnocent.addEventListener("click", function () { submitVerdict("INNOCENT"); });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.target && (event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA")) {
+          return;
+        }
+        if (event.key === "Escape") {
+          if (el.loadModal.classList.contains("open")) {
+            closeLoadModal();
+          } else {
+            clearTransientHighlights();
+            ui.selectedCoord = null;
+            renderAll();
+          }
+          return;
+        }
+        if (el.loadModal.classList.contains("open") || ui.isAutoSolving || !ui.selectedCoord) {
+          return;
+        }
+        if (event.key === "c" || event.key === "C") {
+          submitVerdict("CRIMINAL");
+        } else if (event.key === "i" || event.key === "I") {
+          submitVerdict("INNOCENT");
+        }
+      });
+
+      initApp();
+    })();
+  </script>
+</body>
+</html>
