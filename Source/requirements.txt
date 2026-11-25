@@ -1,6 +1,10 @@
-# Các thư viện phụ trợ cho đồ án (nếu cần dùng thêm)
-# Giao diện mặc định có thể dùng Tkinter (đã tích hợp sẵn trong Python standard library)
-# Nếu sử dụng thêm các thư viện bổ trợ cho đồ họa hoặc biểu đồ đánh giá:
+# Phụ thuộc cho đồ án Griductive Solver
+# Lưu ý: Giao diện Web (Web GUI) sử dụng `http.server` tích hợp sẵn trong Python standard library
+# kết hợp với tệp `gui/index.html` độc lập (không cần cài đặt Flask/FastAPI hay bất kỳ thư viện web ngoài nào).
+
+# Biểu đồ và xử lý số liệu cho thực nghiệm benchmark
 matplotlib>=3.7.0
 numpy>=1.24.0
+
+# Chạy bộ kiểm thử tự động (tương thích cả unittest chuẩn và pytest)
 pytest>=7.0.0

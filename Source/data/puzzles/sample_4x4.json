@@ -1,0 +1,201 @@
+{
+  "puzzle_id": "sample_4x4",
+  "title": "Sample 4x4 Manor Mystery",
+  "size": 4,
+  "initial_revealed": ["A1", "B2", "C3"],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Abel",
+      "profession": "Architect",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": { "kind": "NEIGHBORS", "center": "A1" },
+        "text": "Exactly 2 neighbors of Abel (A1) are criminals."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bea",
+      "profession": "Biologist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": ["B1", "C1"],
+        "region": { "kind": "EXPLICIT", "cells": ["B1", "C1"] },
+        "text": "Bea (B1) and Clara (C1) have different statuses."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Clara",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": { "kind": "ROW", "value": 1 },
+        "text": "Exactly 2 people in row 1 are criminals."
+      }
+    },
+    {
+      "coord": "D1",
+      "name": "Derek",
+      "profession": "Dentist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "AT_LEAST",
+        "k": 3,
+        "region": { "kind": "COLUMN", "value": "D" },
+        "text": "At least 3 people in column D are criminals."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Eliza",
+      "profession": "Engineer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": ["A2", "C2"],
+        "region": { "kind": "EXPLICIT", "cells": ["A2", "C2"] },
+        "text": "Eliza (A2) and Grant (C2) have the same status."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Franz",
+      "profession": "Farmer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "AT_MOST",
+        "k": 1,
+        "region": { "kind": "COLUMN", "value": "B" },
+        "text": "At most 1 person in column B is a criminal."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Grant",
+      "profession": "Geologist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "AT_MOST",
+        "k": 2,
+        "region": { "kind": "ROW", "value": 2 },
+        "text": "At most 2 people in row 2 are criminals."
+      }
+    },
+    {
+      "coord": "D2",
+      "name": "Hannah",
+      "profession": "Historian",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "AT_LEAST",
+        "k": 1,
+        "region": { "kind": "NEIGHBORS", "center": "D2" },
+        "text": "At least 1 neighbor of Hannah (D2) is a criminal."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Ivy",
+      "profession": "Illustrator",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": { "kind": "COLUMN", "value": "A" },
+        "text": "Exactly 2 people in column A are criminals."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Jack",
+      "profession": "Journalist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 4,
+        "region": { "kind": "NEIGHBORS", "center": "B3" },
+        "text": "Exactly 4 neighbors of Jack (B3) are criminals."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Kara",
+      "profession": "Kinesiologist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": ["C3", "C4"],
+        "region": { "kind": "EXPLICIT", "cells": ["C3", "C4"] },
+        "text": "Kara (C3) and Olivia (C4) have different statuses."
+      }
+    },
+    {
+      "coord": "D3",
+      "name": "Leo",
+      "profession": "Lawyer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": { "kind": "ROW", "value": 3 },
+        "text": "Exactly 2 people in row 3 are criminals."
+      }
+    },
+    {
+      "coord": "A4",
+      "name": "Mia",
+      "profession": "Musician",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "FACT",
+        "target": "D4",
+        "status": "CRIMINAL",
+        "region": { "kind": "EXPLICIT", "cells": ["D4"] },
+        "text": "Priya (D4) is a criminal."
+      }
+    },
+    {
+      "coord": "B4",
+      "name": "Noah",
+      "profession": "Nurse",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": { "kind": "ROW", "value": 4 },
+        "text": "Exactly 2 people in row 4 are criminals."
+      }
+    },
+    {
+      "coord": "C4",
+      "name": "Olivia",
+      "profession": "Optician",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": { "kind": "COLUMN", "value": "C" },
+        "text": "Exactly 2 people in column C are criminals."
+      }
+    },
+    {
+      "coord": "D4",
+      "name": "Priya",
+      "profession": "Pilot",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": ["A4", "D4"],
+        "region": { "kind": "EXPLICIT", "cells": ["A4", "D4"] },
+        "text": "Mia (A4) and Priya (D4) have the same status."
+      }
+    }
+  ]
+}
