@@ -1,0 +1,295 @@
+{
+  "puzzle_id": "4x4_05_medium",
+  "title": "4X4 05 Medium",
+  "size": 4,
+  "initial_revealed": [
+    "A1",
+    "D1"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Abel",
+      "profession": "Astronaut",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "INTERSECTION",
+          "regions": [
+            {
+              "kind": "ROW",
+              "value": 1
+            },
+            {
+              "kind": "NEIGHBORS",
+              "center": "B2"
+            }
+          ]
+        },
+        "text": "Exactly 1 criminal in intersection of row 1 and neighbors of B2."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bea",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "B1",
+          "B2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B1",
+            "B2"
+          ]
+        },
+        "text": "B1 and B2 have different statuses."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Clara",
+      "profession": "Clerk",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "AT_MOST",
+        "k": 1,
+        "region": {
+          "kind": "ROW",
+          "value": 2
+        },
+        "text": "At most 1 criminal in row 2."
+      }
+    },
+    {
+      "coord": "D1",
+      "name": "Derek",
+      "profession": "Detective",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "COMPARE",
+        "op": "LT",
+        "region1": {
+          "kind": "COLUMN",
+          "value": "A"
+        },
+        "region2": {
+          "kind": "COLUMN",
+          "value": "B"
+        },
+        "text": "Column a has fewer criminals than column B."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Eliza",
+      "profession": "Electrician",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 3,
+        "region": {
+          "kind": "BOUNDARY"
+        },
+        "text": "Exactly 3 criminals in the board boundary."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Franz",
+      "profession": "Farmer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "AT_LEAST",
+        "k": 3,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B2",
+            "B3",
+            "C3"
+          ]
+        },
+        "text": "At least 3 criminals in B2, B3, C3."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Grant",
+      "profession": "Guard",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "PARITY",
+        "parity": "EVEN",
+        "region": {
+          "kind": "ROW",
+          "value": 3
+        },
+        "text": "An even number of criminals in row 3."
+      }
+    },
+    {
+      "coord": "D2",
+      "name": "Hannah",
+      "profession": "Historian",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "C3",
+        "status": "CRIMINAL",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C3"
+          ]
+        },
+        "text": "C3 is criminal."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Ivy",
+      "profession": "Inspector",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPARE",
+        "op": "GT",
+        "region1": {
+          "kind": "COLUMN",
+          "value": "D"
+        },
+        "region2": {
+          "kind": "COLUMN",
+          "value": "C"
+        },
+        "text": "Column d has more criminals than column C."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Jonas",
+      "profession": "Jeweler",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "ROW",
+          "value": 4
+        },
+        "text": "Exactly 1 criminal in row 4."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Karl",
+      "profession": "Locksmith",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "A3",
+          "D3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A3",
+            "D3"
+          ]
+        },
+        "text": "A3 and D3 have the same status."
+      }
+    },
+    {
+      "coord": "D3",
+      "name": "Leo",
+      "profession": "Mechanic",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 3,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "C3"
+        },
+        "text": "Exactly 3 criminals in neighbors of C3."
+      }
+    },
+    {
+      "coord": "A4",
+      "name": "Mara",
+      "profession": "Musician",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPARE",
+        "op": "EQ",
+        "region1": {
+          "kind": "ROW",
+          "value": 1
+        },
+        "region2": {
+          "kind": "ROW",
+          "value": 3
+        },
+        "text": "Row 1 has the same number of criminals as row 3."
+      }
+    },
+    {
+      "coord": "B4",
+      "name": "Noah",
+      "profession": "Navigator",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "B3",
+          "B4"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B3",
+            "B4"
+          ]
+        },
+        "text": "B3 and B4 have different statuses."
+      }
+    },
+    {
+      "coord": "C4",
+      "name": "Owen",
+      "profession": "Optician",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "AT_MOST",
+        "k": 1,
+        "region": {
+          "kind": "COLUMN",
+          "value": "C"
+        },
+        "text": "At most 1 criminal in column C."
+      }
+    },
+    {
+      "coord": "D4",
+      "name": "Priya",
+      "profession": "Painter",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "PARITY",
+        "parity": "ODD",
+        "region": {
+          "kind": "BOUNDARY"
+        },
+        "text": "An odd number of criminals in the board boundary."
+      }
+    }
+  ]
+}

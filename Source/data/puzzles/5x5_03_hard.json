@@ -1,0 +1,532 @@
+{
+  "puzzle_id": "5x5_03_hard",
+  "title": "5X5 03 Hard",
+  "size": 5,
+  "initial_revealed": [
+    "A1",
+    "B1",
+    "C1",
+    "D1"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Dana",
+      "profession": "Guard",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "E5",
+          "A2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "E5",
+            "A2"
+          ]
+        },
+        "text": "E5 and A2 have the same status."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Dean",
+      "profession": "Cook",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "PARITY",
+        "parity": "ODD",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A2",
+            "A1",
+            "B1",
+            "C1",
+            "D1"
+          ]
+        },
+        "text": "An odd number of criminals in A2, A1, B1, C1, D1."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Derek",
+      "profession": "Singer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "E1",
+          "C4"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "E1",
+            "C4"
+          ]
+        },
+        "text": "E1 and C4 have different statuses."
+      }
+    },
+    {
+      "coord": "D1",
+      "name": "Hank",
+      "profession": "Singer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "D2",
+          "A5"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "D2",
+            "A5"
+          ]
+        },
+        "text": "D2 and A5 have the same status."
+      }
+    },
+    {
+      "coord": "E1",
+      "name": "Hazel",
+      "profession": "Singer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "C2",
+          "D5"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C2",
+            "D5"
+          ]
+        },
+        "text": "C2 and D5 have different statuses."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Leo",
+      "profession": "Teacher",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "B2",
+          "E3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B2",
+            "E3"
+          ]
+        },
+        "text": "B2 and E3 have the same status."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Liam",
+      "profession": "Astronaut",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "B3",
+          "C5"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B3",
+            "C5"
+          ]
+        },
+        "text": "B3 and C5 have different statuses."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Lucy",
+      "profession": "Coder",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "C3",
+          "B5"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C3",
+            "B5"
+          ]
+        },
+        "text": "C3 and B5 have different statuses."
+      }
+    },
+    {
+      "coord": "D2",
+      "name": "Mara",
+      "profession": "Painter",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "A3",
+          "E4"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A3",
+            "E4"
+          ]
+        },
+        "text": "A3 and E4 have the same status."
+      }
+    },
+    {
+      "coord": "E2",
+      "name": "Mason",
+      "profession": "Scientist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "A1",
+          "B1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "B1"
+          ]
+        },
+        "text": "A1 and B1 have different statuses."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Mona",
+      "profession": "Student",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "D3",
+          "A4"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "D3",
+            "A4"
+          ]
+        },
+        "text": "D3 and A4 have different statuses."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Ned",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "B4",
+          "D4"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B4",
+            "D4"
+          ]
+        },
+        "text": "B4 and D4 have the same status."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Nola",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "A1",
+          "B1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "B1"
+          ]
+        },
+        "text": "A1 and B1 have different statuses."
+      }
+    },
+    {
+      "coord": "D3",
+      "name": "Orla",
+      "profession": "Cook",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "A1",
+          "B1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "B1"
+          ]
+        },
+        "text": "A1 and B1 have different statuses."
+      }
+    },
+    {
+      "coord": "E3",
+      "name": "Otis",
+      "profession": "Scientist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "PARITY",
+        "parity": "ODD",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C2",
+            "A1",
+            "B1",
+            "C1",
+            "D1"
+          ]
+        },
+        "text": "An odd number of criminals in C2, A1, B1, C1, D1."
+      }
+    },
+    {
+      "coord": "A4",
+      "name": "Paul",
+      "profession": "Doctor",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "AT_MOST",
+        "k": 2,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B4",
+            "A1",
+            "B1",
+            "C1",
+            "D1"
+          ]
+        },
+        "text": "At most 2 criminals in B4, A1, B1, C1, D1."
+      }
+    },
+    {
+      "coord": "B4",
+      "name": "Pete",
+      "profession": "Singer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "A1",
+          "B1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "B1"
+          ]
+        },
+        "text": "A1 and B1 have different statuses."
+      }
+    },
+    {
+      "coord": "C4",
+      "name": "Queenie",
+      "profession": "Clerk",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "D2",
+          "B1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "D2",
+            "B1"
+          ]
+        },
+        "text": "D2 and B1 have the same status."
+      }
+    },
+    {
+      "coord": "D4",
+      "name": "Quilla",
+      "profession": "Builder",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "E2",
+            "A1",
+            "B1",
+            "C1",
+            "D1"
+          ]
+        },
+        "text": "Exactly 2 criminals in E2, A1, B1, C1, D1."
+      }
+    },
+    {
+      "coord": "E4",
+      "name": "Rosa",
+      "profession": "Guard",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "B3",
+          "A1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B3",
+            "A1"
+          ]
+        },
+        "text": "B3 and A1 have the same status."
+      }
+    },
+    {
+      "coord": "A5",
+      "name": "Roy",
+      "profession": "Student",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 3,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B2",
+            "A1",
+            "B1",
+            "C1",
+            "D1"
+          ]
+        },
+        "text": "Exactly 3 criminals in B2, A1, B1, C1, D1."
+      }
+    },
+    {
+      "coord": "B5",
+      "name": "Ruby",
+      "profession": "Cook",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "PARITY",
+        "parity": "EVEN",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "D3",
+            "A1",
+            "B1",
+            "C1",
+            "D1"
+          ]
+        },
+        "text": "An even number of criminals in D3, A1, B1, C1, D1."
+      }
+    },
+    {
+      "coord": "C5",
+      "name": "Sam",
+      "profession": "Officer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C3",
+            "A1",
+            "B1",
+            "C1",
+            "D1"
+          ]
+        },
+        "text": "Exactly 2 criminals in C3, A1, B1, C1, D1."
+      }
+    },
+    {
+      "coord": "D5",
+      "name": "Senna",
+      "profession": "Student",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "AT_MOST",
+        "k": 2,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A3",
+            "A1",
+            "B1",
+            "C1",
+            "D1"
+          ]
+        },
+        "text": "At most 2 criminals in A3, A1, B1, C1, D1."
+      }
+    },
+    {
+      "coord": "E5",
+      "name": "Seth",
+      "profession": "Teacher",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "AT_LEAST",
+        "k": 3,
+        "region": {
+          "kind": "ROW",
+          "value": 1
+        },
+        "text": "At least 3 criminals in row 1."
+      }
+    }
+  ]
+}

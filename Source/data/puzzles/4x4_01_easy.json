@@ -1,0 +1,310 @@
+{
+  "puzzle_id": "4x4_01_easy",
+  "title": "4X4 01 Easy",
+  "size": 4,
+  "initial_revealed": [
+    "A1"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Avery",
+      "profession": "Architect",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "A1",
+          "B1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "B1"
+          ]
+        },
+        "text": "A1 and B1 have different statuses."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Blake",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "AT_LEAST",
+        "k": 1,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B1",
+            "C1"
+          ]
+        },
+        "text": "At least 1 criminal in B1, C1."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Casey",
+      "profession": "Chemist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "PARITY",
+        "parity": "EVEN",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C1",
+            "D1"
+          ]
+        },
+        "text": "An even number of criminals in C1, D1."
+      }
+    },
+    {
+      "coord": "D1",
+      "name": "Devon",
+      "profession": "Doctor",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "D1",
+            "A2"
+          ]
+        },
+        "text": "Exactly 2 criminals in D1, A2."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Emery",
+      "profession": "Engineer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "A2",
+          "B2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A2",
+            "B2"
+          ]
+        },
+        "text": "A2 and B2 have different statuses."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Finley",
+      "profession": "Florist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "AT_MOST",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B2",
+            "C2"
+          ]
+        },
+        "text": "At most 0 criminals in B2, C2."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Gray",
+      "profession": "Guide",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "PARITY",
+        "parity": "EVEN",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C2",
+            "D2"
+          ]
+        },
+        "text": "An even number of criminals in C2, D2."
+      }
+    },
+    {
+      "coord": "D2",
+      "name": "Harper",
+      "profession": "Historian",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "D2",
+            "A3"
+          ]
+        },
+        "text": "Exactly 1 criminal in D2, A3."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Indigo",
+      "profession": "Illustrator",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "A3",
+          "B3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A3",
+            "B3"
+          ]
+        },
+        "text": "A3 and B3 have different statuses."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Jordan",
+      "profession": "Journalist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "AT_LEAST",
+        "k": 1,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B3",
+            "C3"
+          ]
+        },
+        "text": "At least 1 criminal in B3, C3."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Kai",
+      "profession": "Keeper",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "PARITY",
+        "parity": "EVEN",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C3",
+            "D3"
+          ]
+        },
+        "text": "An even number of criminals in C3, D3."
+      }
+    },
+    {
+      "coord": "D3",
+      "name": "Logan",
+      "profession": "Librarian",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "D3",
+            "A4"
+          ]
+        },
+        "text": "Exactly 2 criminals in D3, A4."
+      }
+    },
+    {
+      "coord": "A4",
+      "name": "Morgan",
+      "profession": "Mechanic",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "A4",
+          "B4"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A4",
+            "B4"
+          ]
+        },
+        "text": "A4 and B4 have different statuses."
+      }
+    },
+    {
+      "coord": "B4",
+      "name": "Noel",
+      "profession": "Nurse",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "AT_MOST",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B4",
+            "C4"
+          ]
+        },
+        "text": "At most 0 criminals in B4, C4."
+      }
+    },
+    {
+      "coord": "C4",
+      "name": "Oakley",
+      "profession": "Optician",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C4",
+            "D4"
+          ]
+        },
+        "text": "No criminals in C4, D4."
+      }
+    },
+    {
+      "coord": "D4",
+      "name": "Parker",
+      "profession": "Pilot",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "A1",
+        "status": "CRIMINAL",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1"
+          ]
+        },
+        "text": "A1 is criminal."
+      }
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "puzzle_id": "3x3_03_easy",
+  "title": "3X3 03 Easy",
+  "size": 3,
+  "initial_revealed": [
+    "B2"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Aaron",
+      "profession": "Analyst",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "ROW",
+          "value": 1
+        },
+        "text": "Exactly 1 criminal in row 1."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bella",
+      "profession": "Architect",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "COLUMN",
+          "value": "B"
+        },
+        "text": "Exactly 1 criminal in column B."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Chloe",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "COLUMN",
+          "value": "C"
+        },
+        "text": "Exactly 1 criminal in column C."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Dylan",
+      "profession": "Designer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "COLUMN",
+          "value": "A"
+        },
+        "text": "Exactly 2 criminals in column A."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Ethan",
+      "profession": "Engineer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "ROW",
+          "value": 2
+        },
+        "text": "Exactly 1 criminal in row 2."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Fiona",
+      "profession": "Pharmacist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 3,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "B2"
+        },
+        "text": "Exactly 3 criminals in neighbors of B2."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Gavin",
+      "profession": "Journalist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A3",
+            "B3",
+            "C3"
+          ]
+        },
+        "text": "Exactly 2 criminals in A3, B3, C3."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Hazel",
+      "profession": "Nurse",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "C3"
+        },
+        "text": "Exactly 1 criminal in neighbors of C3."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Ian",
+      "profession": "Pilot",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "ROW",
+          "value": 3
+        },
+        "text": "Exactly 2 criminals in row 3."
+      }
+    }
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "puzzle_id": "4x4_03_medium",
+  "title": "4X4 03 Medium",
+  "size": 4,
+  "initial_revealed": [
+    "A1",
+    "D1"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Abel",
+      "profession": "Astronaut",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B1",
+            "C1"
+          ]
+        },
+        "text": "No criminals in B1, C1."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bea",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "B1",
+          "B2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B1",
+            "B2"
+          ]
+        },
+        "text": "B1 and B2 have different statuses."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Clara",
+      "profession": "Clerk",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "ROW",
+          "value": 2
+        },
+        "text": "Exactly 1 criminal in row 2."
+      }
+    },
+    {
+      "coord": "D1",
+      "name": "Derek",
+      "profession": "Detective",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "COLUMN",
+          "value": "A"
+        },
+        "text": "Exactly 1 criminal in column A."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Eliza",
+      "profession": "Electrician",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 3,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "D1",
+            "A4",
+            "D4"
+          ]
+        },
+        "text": "Exactly 3 criminals in A1, D1, A4, D4."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Franz",
+      "profession": "Farmer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "ROW",
+          "value": 4
+        },
+        "text": "Exactly 1 criminal in row 4."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Grant",
+      "profession": "Guard",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "COLUMN",
+          "value": "B"
+        },
+        "text": "Exactly 2 criminals in column B."
+      }
+    },
+    {
+      "coord": "D2",
+      "name": "Hannah",
+      "profession": "Historian",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "COLUMN",
+          "value": "D"
+        },
+        "text": "Exactly 2 criminals in column D."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Ivy",
+      "profession": "Inspector",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "PARITY",
+        "parity": "EVEN",
+        "region": {
+          "kind": "ROW",
+          "value": 3
+        },
+        "text": "An even number of criminals in row 3."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Jonas",
+      "profession": "Jeweler",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 3,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "C3"
+        },
+        "text": "Exactly 3 criminals in neighbors of C3."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Karl",
+      "profession": "Locksmith",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "COLUMN",
+          "value": "C"
+        },
+        "text": "Exactly 1 criminal in column C."
+      }
+    },
+    {
+      "coord": "D3",
+      "name": "Leo",
+      "profession": "Mechanic",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "A1",
+          "D4"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "D4"
+          ]
+        },
+        "text": "A1 and D4 have the same status."
+      }
+    },
+    {
+      "coord": "A4",
+      "name": "Mara",
+      "profession": "Musician",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 3,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "B1",
+            "C1",
+            "D1",
+            "A2",
+            "D2",
+            "A3",
+            "D3",
+            "A4",
+            "B4",
+            "C4",
+            "D4"
+          ]
+        },
+        "text": "Exactly 3 criminals in A1, B1, C1, D1, A2, D2, A3, D3, A4, B4, C4, D4."
+      }
+    },
+    {
+      "coord": "B4",
+      "name": "Noah",
+      "profession": "Navigator",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "B3",
+          "B4"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B3",
+            "B4"
+          ]
+        },
+        "text": "B3 and B4 have different statuses."
+      }
+    },
+    {
+      "coord": "C4",
+      "name": "Owen",
+      "profession": "Optician",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "ROW",
+          "value": 1
+        },
+        "text": "Exactly 2 criminals in row 1."
+      }
+    },
+    {
+      "coord": "D4",
+      "name": "Priya",
+      "profession": "Painter",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "FACT",
+        "target": "C3",
+        "status": "CRIMINAL",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C3"
+          ]
+        },
+        "text": "C3 is criminal."
+      }
+    }
+  ]
+}
