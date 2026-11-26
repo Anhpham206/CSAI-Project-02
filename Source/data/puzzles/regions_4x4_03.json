@@ -1,0 +1,321 @@
+{
+  "puzzle_id": "regions_4x4_03",
+  "title": "Regions 4X4 03",
+  "size": 4,
+  "initial_revealed": [
+    "A1",
+    "B1",
+    "C1"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Abel",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "A1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "B1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "C1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "D1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "A2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "B2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "C2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "D2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "A3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "B3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "C3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "D3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "A4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "B4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "C4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "D4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "EXACTLY",
+            "k": 0,
+            "region": {
+              "kind": "BOUNDARY"
+            },
+            "text": "No criminals in the board boundary."
+          }
+        ],
+        "text": "A1 is innocent AND B1 is innocent AND C1 is innocent AND D1 is innocent AND A2 is innocent AND B2 is innocent AND C2 is innocent AND D2 is innocent AND A3 is innocent AND B3 is innocent AND C3 is innocent AND D3 is innocent AND A4 is innocent AND B4 is innocent AND C4 is innocent AND D4 is innocent AND No criminals in the board boundary."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bea",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "CORNERS"
+        },
+        "text": "No criminals in the board corners."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Clara",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "INTERSECTION",
+          "regions": [
+            {
+              "kind": "ROW",
+              "value": 1
+            },
+            {
+              "kind": "COLUMN",
+              "value": "A"
+            }
+          ]
+        },
+        "text": "No criminals in intersection of row 1 and column A."
+      }
+    },
+    {
+      "coord": "D1",
+      "name": "Derek",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "COMMON_NEIGHBORS",
+          "targets": [
+            "A1",
+            "C1"
+          ]
+        },
+        "text": "No criminals in common neighbors of A1 and C1."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Eliza",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "BETWEEN",
+          "targets": [
+            "A1",
+            "C3"
+          ]
+        },
+        "text": "No criminals in cells between A1 and C3."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Franz",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "B2",
+        "status": "INNOCENT",
+        "text": "B2 is innocent."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Grant",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "C2",
+        "status": "INNOCENT",
+        "text": "C2 is innocent."
+      }
+    },
+    {
+      "coord": "D2",
+      "name": "Hannah",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "D2",
+        "status": "INNOCENT",
+        "text": "D2 is innocent."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Ivy",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "A3",
+        "status": "INNOCENT",
+        "text": "A3 is innocent."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Jon",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "B3",
+        "status": "INNOCENT",
+        "text": "B3 is innocent."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Kira",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "C3",
+        "status": "INNOCENT",
+        "text": "C3 is innocent."
+      }
+    },
+    {
+      "coord": "D3",
+      "name": "Liam",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "D3",
+        "status": "INNOCENT",
+        "text": "D3 is innocent."
+      }
+    },
+    {
+      "coord": "A4",
+      "name": "Mona",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "A4",
+        "status": "INNOCENT",
+        "text": "A4 is innocent."
+      }
+    },
+    {
+      "coord": "B4",
+      "name": "Nora",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "B4",
+        "status": "INNOCENT",
+        "text": "B4 is innocent."
+      }
+    },
+    {
+      "coord": "C4",
+      "name": "Oscar",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "C4",
+        "status": "INNOCENT",
+        "text": "C4 is innocent."
+      }
+    },
+    {
+      "coord": "D4",
+      "name": "Pia",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "D4",
+        "status": "INNOCENT",
+        "text": "D4 is innocent."
+      }
+    }
+  ],
+  "expected_outcome": "SOLVABLE",
+  "notes": "Sinh bởi generate_puzzles.py với seed 20261125."
+}
