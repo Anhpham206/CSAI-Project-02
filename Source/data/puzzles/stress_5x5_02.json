@@ -1,0 +1,846 @@
+{
+  "puzzle_id": "stress_5x5_02",
+  "title": "Stress 5X5 02",
+  "size": 5,
+  "initial_revealed": [
+    "A1",
+    "B1",
+    "C1"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Abel",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "A1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "B1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "C1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "D1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "E1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "A2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "B2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "C2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "D2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "E2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "A3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "B3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "C3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "D3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "E3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "A4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "B4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "C4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "D4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "E4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "A5",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "B5",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "C5",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "D5",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "FACT",
+            "target": "E5",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "COMPOUND",
+            "op": "OR",
+            "subclues": [
+              {
+                "type": "FACT",
+                "target": "A1",
+                "status": "INNOCENT"
+              },
+              {
+                "type": "PARITY",
+                "parity": "EVEN",
+                "region": {
+                  "kind": "EXPLICIT",
+                  "cells": [
+                    "A1"
+                  ]
+                }
+              }
+            ],
+            "text": "A1 is innocent OR An even number of criminals in A1."
+          }
+        ],
+        "text": "A1 is innocent AND B1 is innocent AND C1 is innocent AND D1 is innocent AND E1 is innocent AND A2 is innocent AND B2 is innocent AND C2 is innocent AND D2 is innocent AND E2 is innocent AND A3 is innocent AND B3 is innocent AND C3 is innocent AND D3 is innocent AND E3 is innocent AND A4 is innocent AND B4 is innocent AND C4 is innocent AND D4 is innocent AND E4 is innocent AND A5 is innocent AND B5 is innocent AND C5 is innocent AND D5 is innocent AND E5 is innocent AND A1 is innocent OR An even number of criminals in A1."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bea",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "B1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "B1"
+              ]
+            }
+          }
+        ],
+        "text": "B1 is innocent AND An even number of criminals in B1."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Clara",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "C1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "C1"
+              ]
+            }
+          }
+        ],
+        "text": "C1 is innocent AND An even number of criminals in C1."
+      }
+    },
+    {
+      "coord": "D1",
+      "name": "Derek",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "D1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "D1"
+              ]
+            }
+          }
+        ],
+        "text": "D1 is innocent AND An even number of criminals in D1."
+      }
+    },
+    {
+      "coord": "E1",
+      "name": "Eliza",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "E1",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "E1"
+              ]
+            }
+          }
+        ],
+        "text": "E1 is innocent AND An even number of criminals in E1."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Franz",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "A2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "A2"
+              ]
+            }
+          }
+        ],
+        "text": "A2 is innocent AND An even number of criminals in A2."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Grant",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "B2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "B2"
+              ]
+            }
+          }
+        ],
+        "text": "B2 is innocent AND An even number of criminals in B2."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Hannah",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "C2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "C2"
+              ]
+            }
+          }
+        ],
+        "text": "C2 is innocent AND An even number of criminals in C2."
+      }
+    },
+    {
+      "coord": "D2",
+      "name": "Ivy",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "D2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "D2"
+              ]
+            }
+          }
+        ],
+        "text": "D2 is innocent AND An even number of criminals in D2."
+      }
+    },
+    {
+      "coord": "E2",
+      "name": "Jon",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "E2",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "E2"
+              ]
+            }
+          }
+        ],
+        "text": "E2 is innocent AND An even number of criminals in E2."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Kira",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "A3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "A3"
+              ]
+            }
+          }
+        ],
+        "text": "A3 is innocent AND An even number of criminals in A3."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Liam",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "B3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "B3"
+              ]
+            }
+          }
+        ],
+        "text": "B3 is innocent AND An even number of criminals in B3."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Mona",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "C3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "C3"
+              ]
+            }
+          }
+        ],
+        "text": "C3 is innocent AND An even number of criminals in C3."
+      }
+    },
+    {
+      "coord": "D3",
+      "name": "Nora",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "D3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "D3"
+              ]
+            }
+          }
+        ],
+        "text": "D3 is innocent AND An even number of criminals in D3."
+      }
+    },
+    {
+      "coord": "E3",
+      "name": "Oscar",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "E3",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "E3"
+              ]
+            }
+          }
+        ],
+        "text": "E3 is innocent AND An even number of criminals in E3."
+      }
+    },
+    {
+      "coord": "A4",
+      "name": "Pia",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "A4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "A4"
+              ]
+            }
+          }
+        ],
+        "text": "A4 is innocent AND An even number of criminals in A4."
+      }
+    },
+    {
+      "coord": "B4",
+      "name": "Quinn",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "B4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "B4"
+              ]
+            }
+          }
+        ],
+        "text": "B4 is innocent AND An even number of criminals in B4."
+      }
+    },
+    {
+      "coord": "C4",
+      "name": "Rita",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "C4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "C4"
+              ]
+            }
+          }
+        ],
+        "text": "C4 is innocent AND An even number of criminals in C4."
+      }
+    },
+    {
+      "coord": "D4",
+      "name": "Sam",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "D4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "D4"
+              ]
+            }
+          }
+        ],
+        "text": "D4 is innocent AND An even number of criminals in D4."
+      }
+    },
+    {
+      "coord": "E4",
+      "name": "Tara",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "E4",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "E4"
+              ]
+            }
+          }
+        ],
+        "text": "E4 is innocent AND An even number of criminals in E4."
+      }
+    },
+    {
+      "coord": "A5",
+      "name": "Uma",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "A5",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "A5"
+              ]
+            }
+          }
+        ],
+        "text": "A5 is innocent AND An even number of criminals in A5."
+      }
+    },
+    {
+      "coord": "B5",
+      "name": "Vera",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "B5",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "B5"
+              ]
+            }
+          }
+        ],
+        "text": "B5 is innocent AND An even number of criminals in B5."
+      }
+    },
+    {
+      "coord": "C5",
+      "name": "Walt",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "C5",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "C5"
+              ]
+            }
+          }
+        ],
+        "text": "C5 is innocent AND An even number of criminals in C5."
+      }
+    },
+    {
+      "coord": "D5",
+      "name": "Xena",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "D5",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "D5"
+              ]
+            }
+          }
+        ],
+        "text": "D5 is innocent AND An even number of criminals in D5."
+      }
+    },
+    {
+      "coord": "E5",
+      "name": "Yuri",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "COMPOUND",
+        "op": "AND",
+        "subclues": [
+          {
+            "type": "FACT",
+            "target": "E5",
+            "status": "INNOCENT"
+          },
+          {
+            "type": "PARITY",
+            "parity": "EVEN",
+            "region": {
+              "kind": "EXPLICIT",
+              "cells": [
+                "E5"
+              ]
+            }
+          }
+        ],
+        "text": "E5 is innocent AND An even number of criminals in E5."
+      }
+    }
+  ],
+  "expected_outcome": "SOLVABLE",
+  "notes": "Sinh bởi generate_puzzles.py với seed 20261125."
+}

@@ -1,0 +1,254 @@
+{
+  "puzzle_id": "ambiguous_4x4",
+  "title": "Ambiguous 4X4",
+  "size": 4,
+  "initial_revealed": [
+    "A1",
+    "B1",
+    "C1"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Abel",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bea",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Clara",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "D1",
+      "name": "Derek",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Eliza",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Franz",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Grant",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "D2",
+      "name": "Hannah",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Ivy",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Jon",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Kira",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "D3",
+      "name": "Liam",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "A4",
+      "name": "Mona",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "B4",
+      "name": "Nora",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "C4",
+      "name": "Oscar",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    },
+    {
+      "coord": "D4",
+      "name": "Pia",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": []
+        },
+        "text": "Exactly 0 criminals in the selected cells."
+      }
+    }
+  ],
+  "expected_outcome": "UNKNOWN",
+  "notes": "Sinh bởi generate_puzzles.py với seed 20261125."
+}
