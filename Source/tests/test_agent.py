@@ -34,6 +34,9 @@ from agent.deductive_agent import (
     VERDICT_SOLVED,
     VERDICT_UNKNOWN,
     DeductiveAgent,
+    _extract_active_clue_ids,
+    _extract_hidden_coords,
+    _infer_board_size,
 )
 from agent.mock_env import MockEncoder, MockGameEngine, PublicOnlyEngineProxy
 from agent.mock_solver import MockSolver
@@ -142,6 +145,32 @@ def test_solve_all_3x3_via_public_only_proxy_and_trace_contract():
     assert stats["deduction_steps"] == 8
     assert stats["sat_calls"] >= 16
     assert stats["runtime"] >= 0.0
+
+
+def test_agent_accepts_game_engine_public_state_schema():
+    """Agent đọc được đúng tên trường mà GameEngine/Web GUI công khai."""
+    public_state = {
+        "size": 2,
+        "revealed_cells": ["A1"],
+        "unrevealed_cells": ["B2", "A2", "B1"],
+        "revealed_clues": [
+            {"owner_coord": "A1", "clue": {"type": "FACT", "status": "CRIMINAL"}},
+            {"owner_coord": "B1", "clue": None},
+        ],
+    }
+
+    assert _infer_board_size(public_state) == 2
+    assert _extract_hidden_coords(public_state, 2) == ["B1", "A2", "B2"]
+    assert _extract_active_clue_ids(public_state, 2) == ["A1"]
+
+
+def test_reset_is_compatible_with_game_engine_and_gui():
+    agent = DeductiveAgent()
+    agent.trace_history.append({"step": 1})
+
+    agent.reset()
+
+    assert agent.trace_history == []
 
 
 def test_solve_all_stops_cleanly_on_unknown_board():

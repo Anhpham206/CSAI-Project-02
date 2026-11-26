@@ -174,8 +174,9 @@ def _infer_board_size(
     num_primary_vars: int | None = None,
 ) -> int:
     """Suy ra kích thước lưới N từ public_state hoặc num_primary_vars."""
-    if "board_size" in public_state and public_state["board_size"] is not None:
-        board_size = int(public_state["board_size"])
+    state_size = public_state.get("board_size", public_state.get("size"))
+    if state_size is not None:
+        board_size = int(state_size)
         if board_size <= 0:
             raise ValueError(f"board_size không hợp lệ: {board_size}")
         return board_size
@@ -199,12 +200,23 @@ def _extract_hidden_coords(
     if raw_hidden is not None:
         coords = list(raw_hidden)
     else:
+        unrevealed = public_state.get("unrevealed_cells")
+        if unrevealed is not None:
+            coords = list(unrevealed)
+            return sorted(coords, key=lambda c: coord_to_var(c, board_size))
+
         revealed = public_state.get("revealed_cells", {})
+        if isinstance(revealed, list):
+            revealed_coords = set(revealed)
+        elif isinstance(revealed, dict):
+            revealed_coords = set(revealed)
+        else:
+            raise TypeError("revealed_cells phải là dict hoặc list tọa độ.")
         all_coords = [
             var_to_coord(var_id, board_size)
             for var_id in range(1, board_size * board_size + 1)
         ]
-        coords = [c for c in all_coords if c not in revealed]
+        coords = [c for c in all_coords if c not in revealed_coords]
 
     return sorted(coords, key=lambda c: coord_to_var(c, board_size))
 
@@ -220,7 +232,32 @@ def _extract_active_clue_ids(
             key=lambda c: coord_to_var(c, board_size),
         )
 
+    revealed_clues = public_state.get("revealed_clues")
+    if revealed_clues is not None:
+        active = [
+            entry["owner_coord"]
+            for entry in revealed_clues
+            if isinstance(entry, dict)
+            and entry.get("clue") is not None
+            and isinstance(entry.get("owner_coord"), str)
+        ]
+        return sorted(active, key=lambda c: coord_to_var(c, board_size))
+
     revealed = public_state.get("revealed_cells", {})
+    if isinstance(revealed, list):
+        cells = public_state.get("cells", {})
+        if not isinstance(cells, dict):
+            raise TypeError("cells phải là dict khi revealed_cells là list.")
+        active = [
+            coord
+            for coord in revealed
+            if isinstance(cells.get(coord), dict)
+            and cells[coord].get("clue") is not None
+        ]
+        return sorted(active, key=lambda c: coord_to_var(c, board_size))
+    if not isinstance(revealed, dict):
+        raise TypeError("revealed_cells phải là dict hoặc list tọa độ.")
+
     active = [
         coord
         for coord, cell_info in revealed.items()
@@ -251,6 +288,10 @@ class DeductiveAgent:
     def reset_trace(self) -> None:
         """Xóa lịch sử suy luận để bắt đầu một màn chơi mới."""
         self.trace_history = []
+
+    def reset(self) -> None:
+        """Tương thích giao diện reset mà GameEngine và Web GUI sử dụng."""
+        self.reset_trace()
 
     def _resolve_encoder(
         self,

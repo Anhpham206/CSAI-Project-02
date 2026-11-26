@@ -1,6 +1,7 @@
 # Đồ án 2: Griductive Solver
-**Môn học:** Nhập môn Trí tuệ Nhân tạo (CSC14003)  
-**Trường:** Đại học Khoa học Tự nhiên – ĐHQG-HCM  
+
+**Môn học:** Nhập môn Trí tuệ Nhân tạo (CSC14003)
+**Trường:** Đại học Khoa học Tự nhiên – ĐHQG-HCM
 
 ---
 
@@ -11,6 +12,7 @@
 Nguyên tắc cốt lõi của bài toán là **không đoán mò (no-guess)**. Mọi kết luận về thân phận của nhân vật chỉ được chấp nhận khi nó là hệ quả logic tất yếu từ tập tri thức đã mở hiện tại. Khi một phán đoán đúng được chứng minh, thẻ của nhân vật đó sẽ được lật để bổ sung thêm gợi ý mới vào cơ sở tri thức (Knowledge Base).
 
 Chương trình hướng tới các mục tiêu cụ thể:
+
 - Tự động chuyển đổi các gợi ý từ ngôn ngữ cấu trúc sang dạng chuẩn tắc hội (CNF).
 - Tự cài đặt thuật toán kiểm tra tính thỏa được của mệnh đề logic **DPLL (Davis-Putnam-Logemann-Loveland)** không dùng thư viện giải SAT bên ngoài.
 - Xây dựng tác tử suy luận tự động (Deductive Logic Agent) để giải quyết từng bước bàn cờ.
@@ -21,6 +23,7 @@ Chương trình hướng tới các mục tiêu cụ thể:
 ## 2. Kiến trúc hệ thống và Cấu trúc thư mục
 
 Hệ thống được thiết kế theo hướng phân tách rành mạch hai vai trò độc lập theo đúng yêu cầu đề bài:
+
 - **Game Engine:** Nắm giữ toàn bộ trạng thái gốc của ván cờ, bao gồm đáp án ẩn và các gợi ý chưa được lật. Đóng vai trò là trọng tài kiểm tra các phán đoán từ người chơi hoặc tác tử.
 - **Logic Agent:** Chỉ tiếp nhận các thông tin công khai (các ô đã lật và gợi ý tương ứng). Tác tử không được phép đọc các nhãn ẩn để suy luận mà hoàn toàn dựa vào bộ giải SAT.
 
@@ -67,14 +70,18 @@ Project2/
 ## 3. Các thành phần logic chính
 
 ### 3.1. Biến mệnh đề
+
 Mỗi nhân vật $i$ tại ô cờ được ánh xạ sang một biến Boolean duy nhất:
+
 - $C_i = \text{True}$: Nhân vật $i$ là Tội phạm (Criminal).
 - $C_i = \text{False}$: Nhân vật $i$ là Vô tội (Innocent).
 
 Các biến phụ trợ (auxiliary variables) được sinh ra một cách nhất quán khi mã hóa các ràng buộc số lượng hoặc các gợi ý mở rộng, giữ tách biệt với các biến nguyên thủy $C_i$.
 
 ### 3.2. Mẫu gợi ý (Clue Templates)
+
 Chương trình hỗ trợ 6 mẫu gợi ý cơ bản:
+
 - `FACT`: Xác định trực tiếp trạng thái một người ($C_i$ hoặc $\neg C_i$).
 - `SAME`: Hai người cùng trạng thái ($C_i \leftrightarrow C_j$).
 - `DIFFERENT`: Hai người khác trạng thái ($C_i \oplus C_j$).
@@ -85,13 +92,16 @@ Chương trình hỗ trợ 6 mẫu gợi ý cơ bản:
 Ngoài ra, nhóm dự kiến bổ sung thêm ít nhất 2 dạng gợi ý mở rộng theo yêu cầu (như ràng buộc tính chẵn lẻ `PARITY`, so sánh số lượng giữa hai vùng hoặc ràng buộc liên thông).
 
 ### 3.3. Cơ chế suy luận (Entailment via SAT)
+
 Một gán trị thỏa mãn (satisfying assignment) chỉ là một trường hợp khả dĩ. Để đưa ra phán đoán chắc chắn tại bước $t$, cơ sở tri thức $KB_t$ phải kéo theo kết luận đó về mặt logic:
+
 - $KB_t \models C_i \iff KB_t \land \neg C_i$ là **UNSAT** $\rightarrow$ Kết luận: **CRIMINAL**.
 - $KB_t \models \neg C_i \iff KB_t \land C_i$ là **UNSAT** $\rightarrow$ Kết luận: **INNOCENT**.
 - Nếu cả hai trường hợp đều **SAT** $\rightarrow$ Trạng thái: **UNKNOWN** (chưa đủ dữ liệu để chứng minh, không được đoán).
 - Nếu $KB_t$ bản thân nó rơi vào trạng thái vô nghiệm $\rightarrow$ Báo lỗi **INCONSISTENT**.
 
 Đối với thao tác của người chơi trên giao diện:
+
 - Nếu phán đoán chưa thể chứng minh $\rightarrow$ Thông báo `NOT_PROVABLE`.
 - Nếu phán đoán đi ngược lại với logic hiện tại $\rightarrow$ Thông báo `CONTRADICTED`.
 
@@ -100,10 +110,12 @@ Một gán trị thỏa mãn (satisfying assignment) chỉ là một trường h
 ## 4. Hướng dẫn cài đặt và sử dụng
 
 ### 4.1. Yêu cầu môi trường
+
 - Python phiên bản từ 3.10 trở lên.
 - Hệ điều hành: Windows, macOS hoặc Linux.
 
 ### 4.2. Cài đặt
+
 1. Tải hoặc clone mã nguồn về máy:
    ```bash
    git clone https://github.com/Anhpham206/CSAI-Project-02.git
@@ -115,6 +127,7 @@ Một gán trị thỏa mãn (satisfying assignment) chỉ là một trường h
    ```
 
 ### 4.3. Chạy chương trình
+
 - **Khởi động giao diện người dùng:**
   ```bash
   python Source/main.py
@@ -133,10 +146,12 @@ Một gán trị thỏa mãn (satisfying assignment) chỉ là một trường h
 ## 5. Kế hoạch thực nghiệm và Đánh giá
 
 Chương trình sẽ được thử nghiệm trên bộ câu đố chuẩn với các kích thước:
+
 - Lưới $3 \times 3$ và $4 \times 4$ với độ phức tạp tăng dần.
 - Lưới $5 \times 5$ phục vụ cho việc kiểm tra tải và giới hạn xử lý (stress test).
 
 Các chỉ số được ghi nhận sau mỗi lượt giải gồm:
+
 1. Số lượng biến nguyên thủy và biến phụ trợ được tạo ra.
 2. Số lượng mệnh đề trong dạng chuẩn CNF.
 3. Tổng số lượt gọi đến bộ giải SAT.
@@ -148,15 +163,16 @@ Các chỉ số được ghi nhận sau mỗi lượt giải gồm:
 
 ## 6. Phân công nhiệm vụ các thành viên
 
-| STT | Thành viên | MSSV | Module phụ trách chính | Công việc đi kèm (Báo cáo / Sản phẩm) |
-| :---: | :--- | :---: | :--- | :--- |
-| 1 | **Trọng** | | **Game Engine & GUI** (`game/engine.py`, `gui/app.py`) | Quay & dựng Video Demo (5–10 phút); viết tài liệu `README.md`, `requirements.txt` |
-| 2 | **Toàn** | | **CNF Encoder & Clue Extensions** (`logic/encoder.py`, `logic/evaluator.py`) | Xây dựng bộ dữ liệu câu đố mẫu ($3\times3, 4\times4, 5\times5$); viết phần dẫn xuất CNF trong báo cáo |
-| 3 | **Dũng** | | **DPLL SAT Solver** (`solver/dpll.py`) | Cài đặt và tinh chỉnh thuật toán DPLL; viết phần mô tả thuật toán SAT trong báo cáo |
-| 4 | **Đức** | | **Deductive Logic Agent** (`agent/deductive_agent.py`) | Xây dựng Deduction Trace, Uniqueness Check, Hint; viết phần Problem Formulation & Agent |
-| 5 | **Đắc Anh** | | **Benchmark & Experiment Pipeline** (`experiments/benchmark.py`) | **Report Lead**: Tổng hợp và định dạng `Report.pdf`, vẽ biểu đồ thực nghiệm, phụ lục Generative AI |
+| STT | Thành viên        | MSSV | Module phụ trách chính                                                              | Công việc đi kèm (Báo cáo / Sản phẩm)                                                                            |
+| :-: | :------------------ | :--: | :------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------- |
+|  1  | **Trọng**    |      | **Game Engine & GUI** (`game/engine.py`, `gui/app.py`)                       | Quay & dựng Video Demo (5–10 phút); viết tài liệu `README.md`, `requirements.txt`                              |
+|  2  | **Toàn**     |      | **CNF Encoder & Clue Extensions** (`logic/encoder.py`, `logic/evaluator.py`) | Xây dựng bộ dữ liệu câu đố mẫu ($3\times3, 4\times4, 5\times5$); viết phần dẫn xuất CNF trong báo cáo   |
+|  3  | **Dũng**     |      | **DPLL SAT Solver** (`solver/dpll.py`)                                         | Cài đặt và tinh chỉnh thuật toán DPLL; viết phần mô tả thuật toán SAT trong báo cáo                       |
+|  4  | **Đức**     |      | **Deductive Logic Agent** (`agent/deductive_agent.py`)                         | Xây dựng Deduction Trace, Uniqueness Check, Hint; viết phần Problem Formulation & Agent                              |
+|  5  | **Đắc Anh** |      | **Benchmark & Experiment Pipeline** (`experiments/benchmark.py`)               | **Report Lead**: Tổng hợp và định dạng `Report.pdf`, vẽ biểu đồ thực nghiệm, phụ lục Generative AI |
 
 ### Chi tiết phân công công việc:
+
 - **Trọng:** Thiết kế cấu trúc `GameEngine` bảo đảm tách biệt dữ liệu ẩn; xây dựng giao diện hiển thị lưới, ô chọn, highlight manh mối, các nút chức năng (Load, Restart, Hint, Auto Solve); thực hiện video demo thuyết minh và kiểm tra quyền truy cập link Google Drive.
 - **Toàn:** Xây dựng bộ ánh xạ biến và bộ chuyển đổi CNF cho 6 mẫu gợi ý cơ bản cùng ít nhất 2 gợi ý mở rộng; cài đặt bộ đánh giá ngữ nghĩa trực tiếp (`SemanticEvaluator`) để kiểm tra chéo; chuẩn bị bộ câu đố kiểm thử đa dạng trường hợp.
 - **Dũng:** Hiện thực thuật toán DPLL độc lập (Unit Propagation, Conflict Detection, Backtracking); đo đạc và ghi nhận các thông số decisions, propagations, backtracks, runtime; xây dựng các test case kiểm chứng tính đúng đắn cho bộ giải.
