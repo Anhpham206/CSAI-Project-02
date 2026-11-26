@@ -367,13 +367,19 @@ class DeductiveAgent:
             }
 
         # Tạo blocking clause chỉ trên tập biến nguyên thủy 1..num_primary_vars
+        vars_in_clauses = {abs(lit) for clause in clauses for lit in clause}
+        completed_model_1 = dict(model_1)
         blocking_clause: list[int] = []
         for var_id in range(1, num_primary_vars + 1):
-            if var_id not in model_1:
-                raise KeyError(
-                    f"Nghiệm model_1 thiếu giá trị cho biến nguyên thủy {var_id}."
-                )
-            blocking_clause.append(-var_id if model_1[var_id] else var_id)
+            if var_id not in completed_model_1:
+                if var_id in vars_in_clauses:
+                    raise KeyError(
+                        f"Nghiệm model_1 thiếu giá trị cho biến nguyên thủy {var_id}."
+                    )
+                # Biến tự do không xuất hiện trong CNF (vd khi solver dùng total_vars=0):
+                # gán mặc định False cho M1 để blocking clause ép tìm nghiệm khác (+var_id).
+                completed_model_1[var_id] = False
+            blocking_clause.append(-var_id if completed_model_1[var_id] else var_id)
 
         # Lần gọi 2: không mutate `clauses` gốc, tạo danh sách mới có thêm blocking_clause
         has_second, model_2, stats_2 = active_solver.solve(
@@ -385,16 +391,21 @@ class DeductiveAgent:
             return {
                 "status": UNIQUENESS_UNIQUE,
                 "is_unique": True,
-                "model_1": model_1,
+                "model_1": completed_model_1,
                 "model_2": None,
                 "stats": [stats_1, stats_2],
             }
 
+        completed_model_2 = dict(model_2) if model_2 is not None else None
+        if completed_model_2 is not None:
+            for var_id in range(1, num_primary_vars + 1):
+                completed_model_2.setdefault(var_id, False)
+
         return {
             "status": UNIQUENESS_MULTIPLE,
             "is_unique": False,
-            "model_1": model_1,
-            "model_2": model_2,
+            "model_1": completed_model_1,
+            "model_2": completed_model_2,
             "stats": [stats_1, stats_2],
         }
 
