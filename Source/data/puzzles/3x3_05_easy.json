@@ -1,0 +1,170 @@
+{
+  "puzzle_id": "3x3_05_easy",
+  "title": "3X3 05 Easy",
+  "size": 3,
+  "initial_revealed": [
+    "A2",
+    "B3"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Alice",
+      "profession": "Spy",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "A1",
+        "status": "INNOCENT",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1"
+          ]
+        },
+        "text": "A1 is innocent."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bob",
+      "profession": "Guard",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "A1"
+        },
+        "text": "Exactly 2 criminals in neighbors of A1."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Charlie",
+      "profession": "Chef",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "A1",
+          "C1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "C1"
+          ]
+        },
+        "text": "A1 and C1 have the same status."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "David",
+      "profession": "Doctor",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "FACT",
+        "target": "B2",
+        "status": "INNOCENT",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B2"
+          ]
+        },
+        "text": "B2 is innocent."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Eve",
+      "profession": "Pilot",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 4,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "B2"
+        },
+        "text": "Exactly 4 criminals in neighbors of B2."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Frank",
+      "profession": "Lawyer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "A1",
+          "A3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "A3"
+          ]
+        },
+        "text": "A1 and A3 have the same status."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Grace",
+      "profession": "Artist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "A1",
+          "C3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "C3"
+          ]
+        },
+        "text": "A1 and C3 have the same status."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Heidi",
+      "profession": "Engineer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "C1"
+        },
+        "text": "Exactly 2 criminals in neighbors of C1."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Ivan",
+      "profession": "Teacher",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "A3"
+        },
+        "text": "Exactly 2 criminals in neighbors of A3."
+      }
+    }
+  ]
+}

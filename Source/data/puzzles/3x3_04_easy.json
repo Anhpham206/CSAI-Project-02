@@ -1,0 +1,165 @@
+{
+  "puzzle_id": "3x3_04_easy",
+  "title": "3X3 04 Easy",
+  "size": 3,
+  "initial_revealed": [
+    "A1"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Aaron",
+      "profession": "Architect",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B1",
+            "A2"
+          ]
+        },
+        "text": "No criminals in B1, A2."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bella",
+      "profession": "Biologist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "A1",
+          "C1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "C1"
+          ]
+        },
+        "text": "A1 and C1 have the same status."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Caleb",
+      "profession": "Chef",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "COLUMN",
+          "value": "A"
+        },
+        "text": "Exactly 2 criminals in column A."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Diana",
+      "profession": "Dentist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "A2",
+          "B2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A2",
+            "B2"
+          ]
+        },
+        "text": "A2 and B2 have different statuses."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Ethan",
+      "profession": "Engineer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 3,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "B2"
+        },
+        "text": "Exactly 3 criminals in neighbors of B2."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Fiona",
+      "profession": "Florist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "PARITY",
+        "parity": "ODD",
+        "region": {
+          "kind": "ROW",
+          "value": 3
+        },
+        "text": "An odd number of criminals in row 3."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Gavin",
+      "profession": "Geologist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 3,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "C1",
+            "A3",
+            "C3"
+          ]
+        },
+        "text": "Exactly 3 criminals in A1, C1, A3, C3."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Hazel",
+      "profession": "Historian",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "COLUMN",
+          "value": "B"
+        },
+        "text": "Exactly 1 criminal in column B."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Isaac",
+      "profession": "Inspector",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "PARITY",
+        "parity": "EVEN",
+        "region": {
+          "kind": "ROW",
+          "value": 1
+        },
+        "text": "An even number of criminals in row 1."
+      }
+    }
+  ]
+}

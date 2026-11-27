@@ -1,0 +1,178 @@
+{
+  "puzzle_id": "3x3_01_easy",
+  "title": "3X3 01 Easy",
+  "size": 3,
+  "initial_revealed": [
+    "A1",
+    "B3"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Abel",
+      "profession": "Dentist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 5,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B1",
+            "C1",
+            "A2",
+            "B2",
+            "C3"
+          ]
+        },
+        "text": "Exactly 5 criminals in B1, C1, A2, B2, C3."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bianca",
+      "profession": "Historian",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "AT_MOST",
+        "k": 3,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "B3"
+        },
+        "text": "At most 3 criminals in neighbors of B3."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Cyrus",
+      "profession": "Astronaut",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "AT_MOST",
+        "k": 2,
+        "region": {
+          "kind": "COLUMN",
+          "value": "C"
+        },
+        "text": "At most 2 criminals in column C."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Daphne",
+      "profession": "Illustrator",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "B2",
+          "A3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B2",
+            "A3"
+          ]
+        },
+        "text": "B2 and A3 have different statuses."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Elias",
+      "profession": "Florist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "FACT",
+        "target": "C2",
+        "status": "INNOCENT",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C2"
+          ]
+        },
+        "text": "C2 is innocent."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Farah",
+      "profession": "Engineer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "AT_LEAST",
+        "k": 0,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "B2"
+        },
+        "text": "At least 0 criminals in neighbors of B2."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Gideon",
+      "profession": "Baker",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "A2",
+          "C3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A2",
+            "C3"
+          ]
+        },
+        "text": "A2 and C3 have the same status."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Hazel",
+      "profession": "Geologist",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "C2",
+            "A3",
+            "B3"
+          ]
+        },
+        "text": "No criminals in A1, C2, A3, B3."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Iris",
+      "profession": "Chemist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "C1",
+          "C3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C1",
+            "C3"
+          ]
+        },
+        "text": "C1 and C3 have the same status."
+      }
+    }
+  ]
+}

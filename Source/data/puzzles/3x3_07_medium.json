@@ -1,0 +1,191 @@
+{
+  "puzzle_id": "3x3_07_medium",
+  "title": "3X3 07 Medium",
+  "size": 3,
+  "initial_revealed": [
+    "A1",
+    "B2"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Anya",
+      "profession": "Student",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "C3",
+          "A2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C3",
+            "A2"
+          ]
+        },
+        "text": "C3 and A2 have different statuses."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bella",
+      "profession": "Guard",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "C1",
+          "B3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C1",
+            "B3"
+          ]
+        },
+        "text": "C1 and B3 have the same status."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Cara",
+      "profession": "Builder",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "A1",
+          "B2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "B2"
+          ]
+        },
+        "text": "A1 and B2 have different statuses."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Eliza",
+      "profession": "Cook",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "B1",
+          "A3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B1",
+            "A3"
+          ]
+        },
+        "text": "B1 and A3 have different statuses."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Franz",
+      "profession": "Builder",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "PARITY",
+        "parity": "ODD",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A2",
+            "A1",
+            "B2"
+          ]
+        },
+        "text": "An odd number of criminals in A2, A1, B2."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Gwen",
+      "profession": "Cook",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "A1",
+        "status": "INNOCENT",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1"
+          ]
+        },
+        "text": "A1 is innocent."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Ike",
+      "profession": "Astronaut",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "C1",
+          "B2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C1",
+            "B2"
+          ]
+        },
+        "text": "C1 and B2 have the same status."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Jonas",
+      "profession": "Guard",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C2",
+            "A1",
+            "B2"
+          ]
+        },
+        "text": "Exactly 1 criminal in C2, A1, B2."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Kira",
+      "profession": "Cook",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "AT_LEAST",
+        "k": 2,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B1",
+            "A1",
+            "B2"
+          ]
+        },
+        "text": "At least 2 criminals in B1, A1, B2."
+      }
+    }
+  ]
+}

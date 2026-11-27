@@ -1,0 +1,433 @@
+{
+  "puzzle_id": "5x5_01_easy",
+  "title": "5X5 01 Easy",
+  "size": 5,
+  "initial_revealed": [
+    "C3"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Abel",
+      "profession": "Astronaut",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B1",
+            "C1",
+            "D1"
+          ]
+        },
+        "text": "No criminals in B1, C1, D1."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Bea",
+      "profession": "Cook",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "COLUMN",
+          "value": "C"
+        },
+        "text": "Exactly 1 criminal in column C."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Clara",
+      "profession": "Guard",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "ROW",
+          "value": 3
+        },
+        "text": "Exactly 1 criminal in row 3."
+      }
+    },
+    {
+      "coord": "D1",
+      "name": "Derek",
+      "profession": "Cook",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "ROW",
+          "value": 2
+        },
+        "text": "Exactly 2 criminals in row 2."
+      }
+    },
+    {
+      "coord": "E1",
+      "name": "Eliza",
+      "profession": "Detective",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "E2",
+            "E3",
+            "E4"
+          ]
+        },
+        "text": "No criminals in E2, E3, E4."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Franz",
+      "profession": "Detective",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "ROW",
+          "value": 4
+        },
+        "text": "Exactly 2 criminals in row 4."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Grant",
+      "profession": "Clerk",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "B2",
+          "D4"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B2",
+            "D4"
+          ]
+        },
+        "text": "B2 and D4 have the same status."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Hannah",
+      "profession": "Guard",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "COLUMN",
+          "value": "B"
+        },
+        "text": "Exactly 2 criminals in column B."
+      }
+    },
+    {
+      "coord": "D2",
+      "name": "Ivy",
+      "profession": "Clerk",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "COLUMN",
+          "value": "D"
+        },
+        "text": "Exactly 2 criminals in column D."
+      }
+    },
+    {
+      "coord": "E2",
+      "name": "Jonas",
+      "profession": "Farmer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "D2",
+          "E2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "D2",
+            "E2"
+          ]
+        },
+        "text": "D2 and E2 have different statuses."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Karl",
+      "profession": "Painter",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "PARITY",
+        "parity": "EVEN",
+        "region": {
+          "kind": "COLUMN",
+          "value": "A"
+        },
+        "text": "An even number of criminals in column A."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Leo",
+      "profession": "Farmer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 4,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "C3"
+        },
+        "text": "Exactly 4 criminals in neighbors of C3."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Mara",
+      "profession": "Astronaut",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 4,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "E1",
+            "A5",
+            "E5"
+          ]
+        },
+        "text": "Exactly 4 criminals in A1, E1, A5, E5."
+      }
+    },
+    {
+      "coord": "D3",
+      "name": "Noah",
+      "profession": "Clerk",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "PARITY",
+        "parity": "EVEN",
+        "region": {
+          "kind": "COLUMN",
+          "value": "E"
+        },
+        "text": "An even number of criminals in column E."
+      }
+    },
+    {
+      "coord": "E3",
+      "name": "Owen",
+      "profession": "Clerk",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "E3"
+        },
+        "text": "Exactly 2 criminals in neighbors of E3."
+      }
+    },
+    {
+      "coord": "A4",
+      "name": "Priya",
+      "profession": "Farmer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "B4",
+          "D2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B4",
+            "D2"
+          ]
+        },
+        "text": "B4 and D2 have the same status."
+      }
+    },
+    {
+      "coord": "B4",
+      "name": "Quilla",
+      "profession": "Detective",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "A5"
+        },
+        "text": "Exactly 1 criminal in neighbors of A5."
+      }
+    },
+    {
+      "coord": "C4",
+      "name": "Roy",
+      "profession": "Guard",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "C3",
+          "C4"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C3",
+            "C4"
+          ]
+        },
+        "text": "C3 and C4 have different statuses."
+      }
+    },
+    {
+      "coord": "D4",
+      "name": "Sophia",
+      "profession": "Painter",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 1,
+        "region": {
+          "kind": "NEIGHBORS",
+          "center": "E5"
+        },
+        "text": "Exactly 1 criminal in neighbors of E5."
+      }
+    },
+    {
+      "coord": "E4",
+      "name": "Tom",
+      "profession": "Farmer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "E5",
+        "status": "CRIMINAL",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "E5"
+          ]
+        },
+        "text": "E5 is criminal."
+      }
+    },
+    {
+      "coord": "A5",
+      "name": "Uma",
+      "profession": "Biologist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A2",
+            "A3",
+            "A4"
+          ]
+        },
+        "text": "No criminals in A2, A3, A4."
+      }
+    },
+    {
+      "coord": "B5",
+      "name": "Victor",
+      "profession": "Pilot",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "ROW",
+          "value": 5
+        },
+        "text": "Exactly 2 criminals in row 5."
+      }
+    },
+    {
+      "coord": "C5",
+      "name": "Wendy",
+      "profession": "Judge",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "PARITY",
+        "parity": "ODD",
+        "region": {
+          "kind": "ROW",
+          "value": 3
+        },
+        "text": "An odd number of criminals in row 3."
+      }
+    },
+    {
+      "coord": "D5",
+      "name": "Xavier",
+      "profession": "Doctor",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 2,
+        "region": {
+          "kind": "ROW",
+          "value": 1
+        },
+        "text": "Exactly 2 criminals in row 1."
+      }
+    },
+    {
+      "coord": "E5",
+      "name": "Yara",
+      "profession": "Sheriff",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "EXACTLY",
+        "k": 0,
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B5",
+            "C5",
+            "D5"
+          ]
+        },
+        "text": "No criminals in B5, C5, D5."
+      }
+    }
+  ]
+}

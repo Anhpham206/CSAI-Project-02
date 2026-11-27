@@ -1,0 +1,193 @@
+{
+  "puzzle_id": "3x3_02_easy",
+  "title": "3X3 02 Easy",
+  "size": 3,
+  "initial_revealed": [
+    "B2"
+  ],
+  "cells": [
+    {
+      "coord": "A1",
+      "name": "Alice",
+      "profession": "Doctor",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "A1",
+          "B1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1",
+            "B1"
+          ]
+        },
+        "text": "A1 and B1 have the same status."
+      }
+    },
+    {
+      "coord": "B1",
+      "name": "Ben",
+      "profession": "Teacher",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "B1",
+          "C1"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B1",
+            "C1"
+          ]
+        },
+        "text": "B1 and C1 have different statuses."
+      }
+    },
+    {
+      "coord": "C1",
+      "name": "Cara",
+      "profession": "Painter",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "C1",
+          "A2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C1",
+            "A2"
+          ]
+        },
+        "text": "C1 and A2 have the same status."
+      }
+    },
+    {
+      "coord": "A2",
+      "name": "Daniel",
+      "profession": "Engineer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "A2",
+          "B3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A2",
+            "B3"
+          ]
+        },
+        "text": "A2 and B3 have the same status."
+      }
+    },
+    {
+      "coord": "B2",
+      "name": "Emma",
+      "profession": "Scientist",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "FACT",
+        "target": "A1",
+        "status": "CRIMINAL",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "A1"
+          ]
+        },
+        "text": "A1 is criminal."
+      }
+    },
+    {
+      "coord": "C2",
+      "name": "Finn",
+      "profession": "Chef",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "C2",
+          "A3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C2",
+            "A3"
+          ]
+        },
+        "text": "C2 and A3 have different statuses."
+      }
+    },
+    {
+      "coord": "A3",
+      "name": "Grace",
+      "profession": "Nurse",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "FACT",
+        "target": "B2",
+        "status": "CRIMINAL",
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B2"
+          ]
+        },
+        "text": "B2 is criminal."
+      }
+    },
+    {
+      "coord": "B3",
+      "name": "Henry",
+      "profession": "Writer",
+      "hidden_status": "INNOCENT",
+      "clue": {
+        "type": "DIFFERENT",
+        "targets": [
+          "B3",
+          "C3"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "B3",
+            "C3"
+          ]
+        },
+        "text": "B3 and C3 have different statuses."
+      }
+    },
+    {
+      "coord": "C3",
+      "name": "Iris",
+      "profession": "Farmer",
+      "hidden_status": "CRIMINAL",
+      "clue": {
+        "type": "SAME",
+        "targets": [
+          "C3",
+          "C2"
+        ],
+        "region": {
+          "kind": "EXPLICIT",
+          "cells": [
+            "C3",
+            "C2"
+          ]
+        },
+        "text": "C3 and C2 have the same status."
+      }
+    }
+  ]
+}
